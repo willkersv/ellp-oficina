@@ -14,14 +14,6 @@ Este projeto foi desenvolvido para a disciplina "Oficina de Integração 2", com
 
 ---
 
-## 🚀 Funcionalidades
-
-- **Criação e Edição de Projetos**: Gerenciamento de novos e existentes projetos.
-- **Emissão de Certificados**: Configuração e geração de certificados para os participantes.
-- **Relatórios**: Visualização de relatórios sobre participantes e certificados emitidos.
-
----
-
 ## 🏛 Arquitetura do Sistema
 
 - **Frontend**: Interface construída em React.js (ou Angular), que interage com o backend.
@@ -43,10 +35,17 @@ A comunicação entre frontend e backend é feita por meio de APIs REST, permiti
 
 ## 📝 Requisitos Funcionais
 
-1. **Gestão de Alunos**: Adicionar e remover contas dos alunos no workshop.
-2. **Gerenciamento de Projetos**: Criar, editar e excluir projetos disponíveis.
-3. **Emissão de Certificados**: Configurar e gerar certificados personalizados para cada projeto.
-4. **Relatórios e Análises**: Acesso a relatórios detalhados de participação e emissão de certificados.
+- **Sprint 1**:
+  
+  - **RF01**: O sistema deve permitir realizar o cadastro de professor.
+  - **RF02**: O sistema deve permitir realizar o login de professor.
+  - **RF03**: O sistema deve permitir realizar o cadastro de workshop.
+
+- **Sprint 2**:
+  
+  - **RF04**: O professor deve ser capaz de realizar o cadastro de aluno.
+  - **RF05**: O professor deve ser capaz de vincular um aluno ao workshop.
+  - **RF06**: O sistema deve ser capaz de gerar um certificado para o aluno vinculado ao workshop.
 
 ---
 
