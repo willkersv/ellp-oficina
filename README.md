@@ -20,6 +20,7 @@ Este projeto foi desenvolvido para a disciplina "Oficina de Integração 2", com
 - **Backend**: Desenvolvido em Java Spring Boot, gerenciando a lógica de negócios.
 - **Banco de Dados**: PostgreSQL (ou MySQL) para armazenamento de dados, incluindo alunos, projetos e certificados.
 - **Gestão de Certificados**: Geração e armazenamento de certificados em PDF, usando uma biblioteca Java.
+- **Diagrama disponível na pasta "assests" do projeto!**
   
 A comunicação entre frontend e backend é feita por meio de APIs REST, permitindo operações CRUD e acesso aos dados de forma segura e eficiente.
 
