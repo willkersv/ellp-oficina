@@ -1,0 +1,235 @@
+/* -----------------------------------
+   1. Configurações gerais e variáveis
+--------------------------------------*/
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #66bb6a;
+    --background-color: #f9f9f9;
+    --text-color: #333;
+    --error-color: #f44336;
+    --font-family: 'Roboto', Arial, sans-serif;
+    --input-padding: 12px;
+    --element-spacing: 20px; 
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background-color: #f0f0f0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* -----------------------------------
+   2. Containers
+--------------------------------------*/
+.container {
+    max-width: 400px;
+    width: 100%;
+    padding: 25px;
+    background-color: var(--background-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* -----------------------------------
+   3. Cabeçalhos e textos
+--------------------------------------*/
+.header {
+    margin-bottom: var(--element-spacing);
+}
+
+.text {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-color);
+    letter-spacing: 1px;
+    margin-bottom: var(--element-spacing); 
+}
+
+.link-text {
+    font-size: 14px;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: -10px;
+    transition: color 0.3s ease;
+}
+
+.link-text:hover {
+    color: #0056b3;
+}
+
+/* -----------------------------------
+   4. Formulários
+--------------------------------------*/
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--element-spacing); 
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: var(--input-padding);
+    margin: 6% 0% 6% 0% ;
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+}
+
+.input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--text-color);
+    background: transparent;
+    padding: 0; 
+}
+
+.input::placeholder {
+    color: #aaa;
+}
+
+/* Ajuste de ícones dentro do formulário */
+.icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+}
+
+
+/* -----------------------------------
+   5. Botões
+--------------------------------------*/
+.button {
+    width: 100%;
+    padding: var(--input-padding);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.button:hover {
+    background: linear-gradient(135deg, #45a049, #57a657);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo específico para o botão de cadastro */
+.cadastro-button {
+    width: 100%;
+    padding: var(--input-padding);
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cadastro-button:hover {
+    background-color: #45a049;
+}
+
+.button-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* -----------------------------------
+   6. Ícones e setas de navegação
+--------------------------------------*/
+.back-arrow {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+}
+
+.back-arrow img {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.back-arrow img:hover {
+    transform: scale(1.2);
+}
+
+/* -----------------------------------
+   7. Mensagens de erro
+--------------------------------------*/
+.error-message {
+    font-size: 14px;
+    color: var(--error-color);
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* -----------------------------------
+   8. Responsividade
+--------------------------------------*/
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .text {
+        font-size: 20px;
+    }
+
+    .button {
+        font-size: 14px;
+    }
+
+    .icon,
+    .button-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .link-text {
+        font-size: 12px;
+    }
+}
