@@ -1,0 +1,91 @@
+/* Estilo geral da tela Home */
+.home-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    min-height: 100vh;
+}
+
+.home-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
+
+/* Estilo da lista de workshops */
+.workshop-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.workshop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.workshop-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.workshop-info {
+    flex-grow: 1;
+}
+
+.workshop-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 5px;
+}
+
+.workshop-details {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+/* Estilo dos botões */
+.workshop-actions {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-certificate {
+    background-color: #4caf50;
+    color: white;
+}
+
+.button-certificate:hover {
+    background-color: #45a049;
+}
+
+.button-add-students {
+    background-color: #2196f3;
+    color: white;
+}
+
+.button-add-students:hover {
+    background-color: #1976d2;
+}
