@@ -1,0 +1,165 @@
+/* Configurações gerais */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #333;
+}
+
+/* Container central */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Cabeçalho */
+.header {
+    margin-bottom: 20px;
+}
+
+.text {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 1px;
+}
+
+/* Formulário de login */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Grupo de inputs */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group:focus-within {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+}
+
+.icon {
+    width: 22px;
+    height: 22px;
+}
+
+.input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #333;
+    background: transparent;
+    font-family: inherit;
+}
+
+.input::placeholder {
+    color: #bbb;
+    font-style: italic;
+}
+
+/* Texto do link */
+.link-text {
+    font-size: 14px;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: -10px;
+    transition: color 0.3s ease;
+}
+
+.link-text:hover {
+    color: #0056b3;
+}
+
+/* Botão de login */
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    background: linear-gradient(135deg, #4CAF50, #66bb6a);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.login-button:hover {
+    background: linear-gradient(135deg, #45a049, #57a657);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.login-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ícones no botão (se houver) */
+.button-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Estilo para a mensagem de erro */
+.error-message {
+    font-size: 14px;
+    color: #f44336; /* Cor vermelha para indicar erro */
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+
+/* Estilo para dispositivos móveis */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .text {
+        font-size: 22px;
+    }
+
+    .login-form {
+        gap: 15px;
+    }
+
+    .login-button {
+        font-size: 14px;
+    }
+
+    .link-text {
+        font-size: 12px;
+    }
+}

@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Importação correta do Router
+import './App.css';
 
-const App = () => {
-    const [message, setMessage] = useState("");
+import Login from './Components/Telas/Login/Login';
+import CadastroDocente from './Components/Telas/CadastroDocente/CadastroDocente';
 
+function App() {
     return (
-        <div>
-            <h1>Teste E2E com Cypress</h1>
-            <button onClick={() => setMessage("Botão clicado!")}>
-                Clique aqui
-            </button>
-            {message && <p data-testid="message">{message}</p>}
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/cadastro-docente" element={<CadastroDocente />} />
+            </Routes>
+        </Router>
     );
-};
+}
 
 export default App;
