@@ -9,7 +9,7 @@
     --error-color: #f44336;
     --font-family: 'Roboto', Arial, sans-serif;
     --input-padding: 12px;
-    --element-spacing: 20px; /* Espaçamento padrão entre os elementos */
+    --element-spacing: 20px; 
 }
 
 body {
@@ -30,7 +30,7 @@ body {
 .container {
     max-width: 400px;
     width: 100%;
-    padding: 25px; /* Aumentei o padding interno */
+    padding: 25px;
     background-color: var(--background-color);
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -48,7 +48,7 @@ body {
    3. Cabeçalhos e textos
 --------------------------------------*/
 .header {
-    margin-bottom: var(--element-spacing); /* Espaçamento visual */
+    margin-bottom: var(--element-spacing);
 }
 
 .text {
@@ -56,7 +56,7 @@ body {
     font-weight: bold;
     color: var(--text-color);
     letter-spacing: 1px;
-    margin-bottom: var(--element-spacing); /* Adicionei espaçamento */
+    margin-bottom: var(--element-spacing); 
 }
 
 .link-text {
@@ -78,7 +78,7 @@ body {
 .form {
     display: flex;
     flex-direction: column;
-    gap: var(--element-spacing); /* Espaçamento consistente entre elementos */
+    gap: var(--element-spacing); 
 }
 
 .input-group {
@@ -105,7 +105,7 @@ body {
     font-size: 16px;
     color: var(--text-color);
     background: transparent;
-    padding: 0; /* Removi padding extra para evitar overflow */
+    padding: 0; 
 }
 
 .input::placeholder {
@@ -133,6 +133,7 @@ body {
    5. Botões
 --------------------------------------*/
 .button {
+    width: 100%;
     padding: var(--input-padding);
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: #fff;
@@ -157,6 +158,7 @@ body {
 
 /* Estilo específico para o botão de cadastro */
 .cadastro-button {
+    width: 100%;
     padding: var(--input-padding);
     background-color: var(--primary-color);
     color: #fff;

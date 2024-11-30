@@ -1,4 +1,3 @@
-// src/telas/CadastroWorkshop/CadastroWorkshop.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/global.css';
@@ -39,19 +38,17 @@ const CadastroWorkshop = () => {
         setDate('');
         setDuration('');
 
-        // Redirecionar após 2 segundos
         setTimeout(() => {
-            navigate('/workshops');
-        }, 2000);
+            navigate('/home');
+        }, 1000);
     };
 
     const goToWorkshops = () => {
-        navigate('/workshops');
+        navigate('/home');
     };
 
     return (
         <div className="container">
-            {/* Adiciona a seta de voltar */}
             <div className="back-arrow" onClick={goToWorkshops}>
                 <img src={back_arrow_icon} alt="Voltar" />
             </div>
@@ -85,7 +82,6 @@ const CadastroWorkshop = () => {
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
                 />
-                {/* Exibe mensagens de erro ou sucesso */}
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
                 {successMessage && <p className="success-message">{successMessage}</p>}
                 <Button type="submit" className="workshop-button">

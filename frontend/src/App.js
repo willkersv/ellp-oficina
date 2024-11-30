@@ -15,7 +15,6 @@ function App() {
                 <Route path="/cadastro-docente" element={<CadastroDocente />} />
                 <Route path="/cadastro-workshop" element={<CadastroWorkshop />} /> 
                 <Route path="/home" element={<Home />} />
-                {/* Você pode adicionar outras rotas, conforme o crescimento do app */}
             </Routes>
         </Router>
     );
