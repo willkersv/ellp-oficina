@@ -9,7 +9,7 @@ import com.ellp.certificado.service.AlunoService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/alunos")
+@RequestMapping("/api/alunos")
 public class AlunoController {
 
     @Autowired

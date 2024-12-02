@@ -10,7 +10,7 @@ import com.ellp.certificado.service.WorkshopService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/workshops")
+@RequestMapping("/api/workshops")
 public class WorkshopController {
 
     @Autowired

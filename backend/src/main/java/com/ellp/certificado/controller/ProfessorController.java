@@ -10,7 +10,7 @@ import com.ellp.certificado.model.Professor;
 import com.ellp.certificado.service.ProfessorService;
 
 @RestController
-@RequestMapping("/professores")
+@RequestMapping("/api/professores")
 public class ProfessorController {
 
     @Autowired
