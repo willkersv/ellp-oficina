@@ -12,8 +12,13 @@ public class Professor {
     @Id
     private String idProfessor;
 
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false, unique = true)
     private String email;
+    
+    @Column(nullable = false)
     private String senha;
 
     public String getIdProfessor() {
