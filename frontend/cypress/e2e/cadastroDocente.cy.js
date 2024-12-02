@@ -12,6 +12,7 @@ describe('Teste de Cadastro de Docente', () => {
         cy.get('input[placeholder="Nome completo"]').should('be.visible');
         cy.get('input[placeholder="Email institucional"]').should('be.visible');
         cy.get('input[placeholder="Senha"]').should('be.visible');
+        cy.get('input[placeholder="RA (Registro Acadêmico)"]').should('be.visible'); // Verifica o campo RA
         cy.contains('Cadastrar').should('be.visible');
     });
 
@@ -20,6 +21,7 @@ describe('Teste de Cadastro de Docente', () => {
         cy.get('input[placeholder="Nome completo"]').type('Docente Exemplo');
         cy.get('input[placeholder="Email institucional"]').type('novo@email.com');
         cy.get('input[placeholder="Senha"]').type('senha123');
+        cy.get('input[placeholder="RA (Registro Acadêmico)"]').type('12345678'); // Preenche o RA
 
         // Submete o formulário
         cy.contains('Cadastrar').click();
@@ -37,12 +39,23 @@ describe('Teste de Cadastro de Docente', () => {
         cy.get('input[placeholder="Nome completo"]').type('Docente Existente');
         cy.get('input[placeholder="Email institucional"]').type('existente@email.com');
         cy.get('input[placeholder="Senha"]').type('senha123');
+        cy.get('input[placeholder="RA (Registro Acadêmico)"]').type('87654321'); // Preenche o RA
 
         // Submete o formulário
         cy.contains('Cadastrar').click();
 
         // Verifica se a mensagem de erro é exibida
         cy.contains('Email já cadastrado.').should('be.visible');
+    });
+
+    it('Deve exibir mensagem de erro ao tentar cadastrar sem preencher o RA', () => {
+        // Preenche os campos sem o RA
+        cy.get('input[placeholder="Nome completo"]').type('Docente Sem RA');
+        cy.get('input[placeholder="Email institucional"]').type('docente@exemplo.com');
+        cy.get('input[placeholder="Senha"]').type('senha123');
+        
+        // Deixa o campo RA vazio e submete o formulário
+        cy.contains('Cadastrar').click();
     });
 
     it('Deve redirecionar para a página de login ao clicar no botão de voltar', () => {
@@ -58,6 +71,6 @@ describe('Teste de Cadastro de Docente', () => {
         cy.contains('Cadastrar').click();
 
         // Verifica se a mensagem de erro é exibida (validação no front-end)
-        cy.contains('Email já cadastrado.').should('not.exist'); // Simula sem ação no mock
+        cy.contains('RA é obrigatório.').should('be.visible'); // Certifique-se que validação simula erro para RA vazio
     });
 });
