@@ -9,6 +9,7 @@ import Header from '../Components/Header';
 import user_icon from '../Assets/user.png';
 import password_icon from '../Assets/cadeado.png';
 import email_icon from '../Assets/e-mail.png';
+import ra_icon from '../Assets/registrado.png';
 import back_arrow_icon from '../Assets/seta-esquerda.png';
 
 import api from '../api/axios';
@@ -17,6 +18,7 @@ const CadastroDocente = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [ra, setRa] = useState(''); 
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
@@ -54,6 +56,13 @@ const CadastroDocente = () => {
                     placeholder="Nome completo"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                />
+                <InputField
+                    icon={ra_icon} // Ícone para RA
+                    type="text"
+                    placeholder="RA (Registro Acadêmico)"
+                    value={ra}
+                    onChange={(e) => setRa(e.target.value)}
                 />
                 <InputField
                     icon={email_icon}
