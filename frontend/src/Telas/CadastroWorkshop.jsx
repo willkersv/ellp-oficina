@@ -12,6 +12,8 @@ import titulo from '../Assets/titulo.png';
 import calendario from '../Assets/calendario.png';
 import relogio from '../Assets/relogio.png';
 
+import api from '../api/axios';
+
 const CadastroWorkshop = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -30,17 +32,24 @@ const CadastroWorkshop = () => {
             return;
         }
 
-        // Simulação de sucesso no cadastro
-        setErrorMessage('');
-        setSuccessMessage('Workshop criado com sucesso!');
-        setTitle('');
-        setDescription('');
-        setDate('');
-        setDuration('');
-
-        setTimeout(() => {
-            navigate('/home');
-        }, 1000);
+        try {
+            const response = await api.post('http://localhost:8080/workshops', {
+                nome: title,
+                descricao: description,
+                data: date,
+                duracao: parseInt(duration),  // Certifique-se de que a duração é um número
+            });
+            setSuccessMessage('Workshop criado com sucesso!');
+            setTitle('');
+            setDescription('');
+            setDate('');
+            setDuration('');
+            setTimeout(() => {
+                navigate('/home');
+            }, 1000);
+        } catch (error) {
+            setErrorMessage('Erro ao criar o workshop. Tente novamente.');
+        }
     };
 
     const goToWorkshops = () => {

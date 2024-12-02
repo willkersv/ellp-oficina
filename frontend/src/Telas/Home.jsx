@@ -9,6 +9,8 @@ import add_aluno_icon from '../Assets/adicionar-usuario.png';
 import logout_icon from '../Assets/botao-logout.png';
 import ReactDOM from 'react-dom';
 
+import api from '../api/axios';
+
 const Home = () => {
     const [workshops, setWorkshops] = useState([]);
     const [students, setStudents] = useState([]);
@@ -19,12 +21,12 @@ const Home = () => {
 
     useEffect(() => {
         const fetchWorkshops = async () => {
-            const mockWorkshops = [
-                { id: 1, title: 'Workshop de React', date: '2024-12-10', duration: '3h' },
-                { id: 2, title: 'Workshop de Spring Boot', date: '2024-12-15', duration: '4h' },
-                { id: 3, title: 'Workshop de JavaScript', date: '2024-12-20', duration: '2h' },
-            ];
-            setWorkshops(mockWorkshops);
+            try {
+                const response = await api.get('http://localhost:8080/workshops');
+                setWorkshops(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar workshops:', error);
+            }
         };
         fetchWorkshops();
     }, []);

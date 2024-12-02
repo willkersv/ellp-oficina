@@ -9,19 +9,23 @@ import Header from '../Components/Header';
 import email_icon from '../Assets/e-mail.png';
 import password_icon from '../Assets/cadeado.png';
 
+import api from '../api/axios';
+
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-
-        if (username === '1@example.com' && password === '1') {
+        try {
+            const response = await api.post('http://localhost:8080/professores/login', null, {
+                params: { email: username, senha: password },
+            });
             setErrorMessage('');
-            navigate('/home');
-        } else {
+            navigate('/home');  // Navegação para a página Home após o login
+        } catch (error) {
             setErrorMessage('Credenciais inválidas');
         }
     };

@@ -11,6 +11,8 @@ import password_icon from '../Assets/cadeado.png';
 import email_icon from '../Assets/e-mail.png';
 import back_arrow_icon from '../Assets/seta-esquerda.png';
 
+import api from '../api/axios';
+
 const CadastroDocente = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -22,18 +24,16 @@ const CadastroDocente = () => {
     const handleCadastro = async (e) => {
         e.preventDefault();
 
-        const mockResponse = {
-            success: email !== 'existente@email.com',
-            message: email === 'existente@email.com' ? 'Email já cadastrado.' : 'Cadastro realizado com sucesso!',
-        };
-
-        if (mockResponse.success) {
-            setErrorMessage('');
-            setSuccessMessage(mockResponse.message);
-            setTimeout(() => navigate('/'), 2000);
-        } else {
-            setErrorMessage(mockResponse.message);
-            setSuccessMessage('');
+        try {
+            const response = await api.post('http://localhost:8080/professores/cadastro', {
+                idProfessor: "2",
+                nome: name,
+                email: email,
+                senha: password,
+            });
+            setSuccessMessage(response.data);  // Mensagem de sucesso
+        } catch (error) {
+            setErrorMessage('Erro ao cadastrar professor.');  // Mensagem de erro
         }
     };
 
