@@ -29,7 +29,7 @@ public class ProfessorController {
     @PostMapping("/login")
     public ResponseEntity<?> realizarLogin(@RequestParam String email, @RequestParam String senha) {
         try {
-            Professor professor = professorService.realizarLogin(email, senha);
+            professorService.realizarLogin(email, senha);
             return ResponseEntity.ok("Login realizado com sucesso ferinha :) ");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
