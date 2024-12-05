@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-CertificadoApplication<certificado>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ellp.certificado.CertificadoApplication",
+            "projectName": "certificado",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\CertificadoApplication.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\config\WebConfig.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\controller\ProfessorController.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\controller\WorkshopController.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\model\Professor.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\model\Workshop.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\repository\ProfessorRepository.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\repository\WorkshopRepository.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\service\ProfessorService.java
+R:\materias utf\Oficina2\ellp-oficina\backend\src\main\java\com\ellp\certificado\service\WorkshopService.java
