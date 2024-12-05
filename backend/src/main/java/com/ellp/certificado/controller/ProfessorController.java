@@ -17,32 +17,34 @@ public class ProfessorController {
     private ProfessorService professorService;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<?> cadastrarProfessor(@RequestBody Professor professor) {
+    public ResponseEntity<?> createProfessor(@RequestBody Professor professor) {
         try {
-            Professor novoProfessor = professorService.cadastrarProfessor(professor);
-            return ResponseEntity.ok("Professor cadastrado com sucesso, ferinha\n" + novoProfessor.getNome());
+            return professorService.createProfessor(professor);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProfessor(@PathVariable String id, @RequestBody Professor professor) {
+        try {
+            return ResponseEntity.ok(professorService.updateProfessor(id, professor));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> realizarLogin(@RequestParam String email, @RequestParam String senha) {
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String senha) {
         try {
-            professorService.realizarLogin(email, senha);
-            return ResponseEntity.ok("Login realizado com sucesso ferinha :) ");
+            return professorService.login(email, senha);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
-    @GetMapping()
-    public List<Professor> getAll() {
-        try {
-            List<Professor> professores = professorService.getAll();
-            return professores;
-        } catch (RuntimeException e) {
-            return null;
-        }
+    @GetMapping
+    public List<Professor> getAllAlunos() {
+        return professorService.getAll();
     }
 }

@@ -9,6 +9,7 @@ import com.ellp.certificado.service.WorkshopService;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/workshops")
 public class WorkshopController {
@@ -21,31 +22,32 @@ public class WorkshopController {
         return workshopService.getAllWorkshops();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getWorkshopById(@PathVariable int id) {
+        return workshopService.getWorkshopById(id);
+    }
+
+    @GetMapping("/search/{nomeWorkshop}")
+    public ResponseEntity<?> getWorkshopByNome(@PathVariable String nomeWorkshop) {
+        return workshopService.getWorkshopByNome(nomeWorkshop);
+    }
+
     @PostMapping
-    public Workshop createWorkshop(@RequestBody Workshop workshop) {
+    public ResponseEntity<?> createWorkshop(@RequestBody Workshop workshop) {
         return workshopService.createWorkshop(workshop);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Workshop> getWorkshopById(@PathVariable int id) {
-        return workshopService.getWorkshopById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<Workshop> updateWorkshop(@PathVariable int id, @RequestBody Workshop workshopDetails) {
-        return workshopService.updateWorkshop(id, workshopDetails)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> updateWorkshop(@PathVariable int id, @RequestBody Workshop workshop) {
+        try {
+            return ResponseEntity.ok(workshopService.updateWorkshop(id, workshop));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWorkshop(@PathVariable int id) {
-        if (workshopService.deleteWorkshop(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> deleteWorkshop(@PathVariable int id) {
+        return workshopService.deleteWorkshop(id);    
     }
 }
