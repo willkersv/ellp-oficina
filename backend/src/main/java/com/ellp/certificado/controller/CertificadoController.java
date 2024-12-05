@@ -15,13 +15,27 @@ public class CertificadoController {
     private CertificadoService certificadoService;
 
     @PostMapping
-    public ResponseEntity<String> adicionarCertificado(@RequestBody Certificado certificado) {
-        String resultado = certificadoService.adicionarCertificado(certificado);
+    public ResponseEntity<?> createCertificado(@RequestBody Certificado certificado) {
+        return certificadoService.createCertificado(certificado);
+    }
 
-        if (resultado.equals("Certificado adicionado com sucesso!")) {
-            return ResponseEntity.ok(resultado);
-        } else {
-            return ResponseEntity.badRequest().body(resultado);
-        }
+    @GetMapping
+    public ResponseEntity<?> getAllCertificado() {
+        return certificadoService.getAllCertificado();
+    }
+
+    @GetMapping("/aluno/{idAluno}")
+    public ResponseEntity<?> getByAluno(@PathVariable String idAluno) {
+        return certificadoService.getByAluno(idAluno);
+    }
+
+    @GetMapping("/workshop/{idWorkshop}")
+    public ResponseEntity<?> getByWorkshop(@PathVariable Integer idWorkshop) {
+        return certificadoService.getByWorkshop(idWorkshop);
+    }
+
+    @DeleteMapping("/{idWorkshop}/{idAluno}")
+    public ResponseEntity<?> deleteCertificado(@PathVariable Integer idWorkshop, @PathVariable String idAluno) {
+        return certificadoService.deleteCertificado(idWorkshop, idAluno);
     }
 }
