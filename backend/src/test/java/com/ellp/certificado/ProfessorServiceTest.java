@@ -2,16 +2,19 @@ package com.ellp.certificado;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.ellp.certificado.model.Professor;
 import com.ellp.certificado.repository.ProfessorRepository;
@@ -29,15 +32,59 @@ class ProfessorServiceTest {
     @Autowired
     private ProfessorRepository professorRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    @BeforeEach
+    void setup() {
+        professorRepository.deleteAll();
+        Professor professor = new Professor("P001", "Carlos", "carlos@gmail.com", encoder.encode("senha123"));
+        professorRepository.save(professor);
+    }
+
+    @Test
+    void testLogin_Success() {
+        ResponseEntity<Boolean> response = professorService.login("carlos@gmail.com", "senha123");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody());
+    }
+
+    @Test
+    void testLogin_InvalidPassword() {
+        ResponseEntity<Boolean> response = professorService.login("carlos@gmail.com", "senhaErrada");
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertFalse(response.getBody());
+    }
+
+    @Test
+    void testLogin_InvalidEmail() {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            professorService.login("inexistente@gmail.com", "senha123");
+        });
+
+        assertEquals("E-mail ou senha inválidos.", exception.getMessage());
+    }
+
+    @Test
+    void testLogin_NullEmail() {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            professorService.login(null, "senha123");
+        });
+
+        assertEquals("E-mail ou senha inválidos.", exception.getMessage());
+    }
+
     @Test
     void testCreateProfessor_Success() {
        
-        Professor professor = new Professor("P001", "Ana Lima", "ana@gmail.com", "senha123");
+        Professor professor = new Professor("P002", "Ana Lima", "ana@gmail.com", "senha123");
         ResponseEntity<?> response = professorService.createProfessor(professor);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("Professor adicionado com sucesso!", response.getBody());
 
-        Optional<Professor> professorSalvo = professorRepository.findById("P001");
+        Optional<Professor> professorSalvo = professorRepository.findById("P002");
         Assertions.assertTrue(professorSalvo.isPresent());
         Assertions.assertEquals("Ana Lima", professorSalvo.get().getNome());
     }
