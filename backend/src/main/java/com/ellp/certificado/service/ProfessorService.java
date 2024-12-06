@@ -50,7 +50,7 @@ public class ProfessorService {
             return ResponseEntity.badRequest().body("Professor não encontrado.");
         }
         professorRepository.deleteById(id);
-        return ResponseEntity.ok("Professor excluído com sucesso!");
+        return ResponseEntity.ok("Professor deletado com sucesso!");
     }
 
     public ResponseEntity<Boolean> login(String email, String senha) {
