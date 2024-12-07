@@ -21,4 +21,6 @@ public interface CertificadoRepository extends JpaRepository<Certificado, Certif
 
     @Query("SELECT c FROM Certificado c WHERE c.workshop.idWorkshop = :idWorkshop")
     List<Certificado> findByWorkshopId(@Param("idWorkshop") int idWorkshop);
+
+    void deleteByAlunoIdAluno(String idAluno);
 }
