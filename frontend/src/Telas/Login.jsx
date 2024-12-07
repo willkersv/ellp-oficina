@@ -20,7 +20,7 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('http://localhost:8080/professores/login', null, {
+            const response = await api.post('http://localhost:8080/api/professores/login', null, {
                 params: { email: username, senha: password },
             });
             setErrorMessage('');
