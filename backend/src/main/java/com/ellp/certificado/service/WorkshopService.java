@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ellp.certificado.model.Certificado;
 import com.ellp.certificado.model.Workshop;
+import com.ellp.certificado.repository.CertificadoRepository;
 import com.ellp.certificado.repository.WorkshopRepository;
 
 import java.util.List;
@@ -16,6 +18,9 @@ public class WorkshopService {
 
     @Autowired
     private WorkshopRepository workshopRepository;
+
+    @Autowired
+    private CertificadoRepository certificadoRepository;
 
     public List<Workshop> getAllWorkshops() {
         return workshopRepository.findAll();
@@ -87,7 +92,13 @@ public class WorkshopService {
         if (!workshopRepository.existsById(id)) {
             return ResponseEntity.badRequest().body("Workshop não encontrado.");
         }
+        
+        List<Certificado> certificados = certificadoRepository.findByWorkshopId(id);
+        certificadoRepository.deleteAll(certificados);
+
         workshopRepository.deleteById(id);
-        return ResponseEntity.ok("Workshop excluído com sucesso!");
-    }
+
+        return ResponseEntity.ok("Workshop e certificados associados excluídos com sucesso!");
+}
+    
 }
