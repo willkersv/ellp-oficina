@@ -14,7 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.ellp.certificado.model.Aluno;
+import com.ellp.certificado.model.Certificado;
+import com.ellp.certificado.model.CertificadoId;
 import com.ellp.certificado.model.Workshop;
+import com.ellp.certificado.repository.AlunoRepository;
+import com.ellp.certificado.repository.CertificadoRepository;
 import com.ellp.certificado.repository.WorkshopRepository;
 import com.ellp.certificado.service.WorkshopService;
 
@@ -29,6 +34,12 @@ class WorkshopServiceTest {
 
     @Autowired
     private WorkshopRepository workshopRepository;
+
+    @Autowired
+    private CertificadoRepository certificadoRepository;
+
+    @Autowired
+    private AlunoRepository alunoRepository;
 
     private Workshop workshop;
 
@@ -98,7 +109,7 @@ class WorkshopServiceTest {
         ResponseEntity<?> response = workshopService.deleteWorkshop(workshop.getIdWorkshop());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Workshop excluído com sucesso!", response.getBody());
+        assertEquals("Workshop e certificados associados excluídos com sucesso!", response.getBody());
 
         Optional<Workshop> deletedWorkshop = workshopRepository.findById(workshop.getIdWorkshop());
         assertFalse(deletedWorkshop.isPresent());
@@ -143,4 +154,27 @@ class WorkshopServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Nenhum workshop encontrado com o nome: Inexistente", response.getBody());
     }
+
+    @Test
+    void testDeleteWorkshop_WithCertificates() {
+        Aluno aluno = new Aluno("A001", "João Silva", "joao@gmail.com", "eng");
+        aluno = alunoRepository.save(aluno);
+
+        Workshop workshop = new Workshop("Workshop Teste", 10, LocalDate.now(), "Descrição");
+        workshop = workshopRepository.save(workshop);
+
+        Certificado certificado = new Certificado();
+        certificado.setWorkshop(workshop);
+        certificado.setAluno(aluno);
+        certificado = certificadoRepository.save(certificado);
+
+        ResponseEntity<?> response = workshopService.deleteWorkshop(workshop.getIdWorkshop());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Workshop e certificados associados excluídos com sucesso!", response.getBody());
+
+        assertFalse(certificadoRepository.existsById(new CertificadoId(aluno.getIdAluno(), workshop.getIdWorkshop())));
+
+        assertFalse(workshopRepository.existsById(workshop.getIdWorkshop()));
+    }
+
 }
