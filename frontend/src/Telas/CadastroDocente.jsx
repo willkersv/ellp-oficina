@@ -27,7 +27,7 @@ const CadastroDocente = () => {
         e.preventDefault();
 
         try {
-            const response = await api.post('http://localhost:8080/professores/cadastro', {
+            const response = await api.post('http://localhost:8080/api/professores/cadastro', {
                 idProfessor: "2",
                 nome: name,
                 email: email,

@@ -22,7 +22,7 @@ const Home = () => {
     useEffect(() => {
         const fetchWorkshops = async () => {
             try {
-                const response = await api.get('http://localhost:8080/workshops');
+                const response = await api.get('http://localhost:8080/api/workshops');
                 setWorkshops(response.data);
             } catch (error) {
                 console.error('Erro ao buscar workshops:', error);
