@@ -112,7 +112,6 @@ public class CertificadoService {
     }
 
     public ResponseEntity<?> generateCertificatePdf(String idAluno, int idWorkshop) {
-        // Busca o certificado, aluno e workshop
         Optional<Certificado> certificadoOptional = certificadoRepository.findByAlunoIdAlunoAndWorkshopIdWorkshop(idAluno, idWorkshop);
 
         if (certificadoOptional.isEmpty()) {
@@ -124,18 +123,15 @@ public class CertificadoService {
         Workshop workshop = certificado.getWorkshop();
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            // Configuração do documento PDF
             Document document = new Document();
             PdfWriter.getInstance(document, outputStream);
             document.open();
 
-            // Fontes com tamanho aumentado e em negrito
             Font titleFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD);
             Font subtitleFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
             Font nameFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD);
             Font smallFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
-            // Adicionando a Universidade antes do título
             Paragraph universityName = new Paragraph("Universidade Tecnológica Federal do Paraná", smallFont);
             universityName.setAlignment(Element.ALIGN_CENTER);
             universityName.setSpacingAfter(5);
@@ -146,13 +142,11 @@ public class CertificadoService {
             campusName.setSpacingAfter(20);
             document.add(campusName);
 
-            // Adicionando o título
             Paragraph title = new Paragraph("DECLARAÇÃO DE PARTICIPAÇÃO", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20);
             document.add(title);
 
-            // Adicionando subtítulo
             Paragraph subtitle = new Paragraph(
                 "O Projeto de Extensão ELLP (Ensino Lúdico de Lógica e Programação) declara que",
                 subtitleFont);
@@ -160,13 +154,11 @@ public class CertificadoService {
             subtitle.setSpacingAfter(30);
             document.add(subtitle);
 
-            // Nome do participante
             Paragraph participantName = new Paragraph(aluno.getNome().toUpperCase(), nameFont);
             participantName.setAlignment(Element.ALIGN_CENTER);
             participantName.setSpacingAfter(30);
             document.add(participantName);
 
-            // Detalhes do workshop
             Paragraph details = new Paragraph(
                 String.format("participou do workshop %s, realizado em %s, com duração de %d horas.",
                     workshop.getNome(),
@@ -179,7 +171,6 @@ public class CertificadoService {
             details.setSpacingAfter(50);
             document.add(details);
 
-            // Data e assinatura
             Paragraph footer = new Paragraph(
                 String.format("Cornélio Procópio, %s\n\nContato: grupoellp@gmail.com\nProjeto de Extensão Ensino Lúdico de Lógica e Programação",
                     LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))),
@@ -190,7 +181,6 @@ public class CertificadoService {
 
             document.close();
 
-            // Salvando no sistema de arquivos
             String rootPath = System.getProperty("user.dir"); // Diretório raiz do projeto
             String assetsDirectory = rootPath + File.separator + "assets/certificados";
             new File(assetsDirectory).mkdirs(); // Cria a pasta, se necessário
