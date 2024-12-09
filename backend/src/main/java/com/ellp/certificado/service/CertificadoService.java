@@ -4,6 +4,8 @@ package com.ellp.certificado.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.ellp.certificado.model.Aluno;
@@ -18,6 +20,8 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import jakarta.mail.internet.MimeMessage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,6 +43,9 @@ public class CertificadoService {
 
     @Autowired
     private WorkshopRepository workshopRepository;
+
+    @Autowired
+    private JavaMailSender emailSender;
 
     public ResponseEntity<?> getAllCertificado() {
         List<Certificado> certificados = certificadoRepository.findAll();
@@ -181,19 +188,48 @@ public class CertificadoService {
 
             document.close();
 
-            String rootPath = System.getProperty("user.dir"); // Diretório raiz do projeto
+            String rootPath = System.getProperty("user.dir");
             String assetsDirectory = rootPath + File.separator + "assets/certificados";
-            new File(assetsDirectory).mkdirs(); // Cria a pasta, se necessário
+            new File(assetsDirectory).mkdirs();
             String filePath = assetsDirectory + File.separator + "certificado_" + idAluno + "_" + idWorkshop + ".pdf";
 
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 fos.write(outputStream.toByteArray());
             }
 
+            sendCertificateEmail(aluno.getEmail(), "Certificado de Participação - ELLP",
+            "Olá " + aluno.getNome() + ",\n\nSegue em anexo o seu certificado de participação no workshop " +
+                    workshop.getNome() + ".\n\nDescrição do workshop: " + workshop.getDescricao() +  ".\n\n\nAtenciosamente,\nWillker Santana", filePath);
+            
             return ResponseEntity.ok("Certificado gerado e salvo com sucesso em: " + filePath);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao gerar o certificado: " + e.getMessage());
+        }
+
+        
+    }
+
+    private void sendCertificateEmail(String toEmail, String subject, String text, String filePath) {
+        try {
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(text);
+
+            File file = new File(filePath);
+            if (file.exists()) {
+                helper.addAttachment(file.getName(), file);
+            } else {
+                throw new RuntimeException("Arquivo não encontrado: " + filePath);
+            }
+
+            emailSender.send(mimeMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao enviar o e-mail: " + e.getMessage());
         }
     }
 }
