@@ -17,6 +17,15 @@ public class Aluno {
     @Column(nullable = false)
     private String curso;
 
+    public Aluno(){}
+    
+    public Aluno(String idAluno, String nome, String email, String curso) {
+        this.idAluno = idAluno;
+        this.nome = nome;
+        this.email = email;
+        this.curso = curso;
+    }
+
     public String getIdAluno() {
         return idAluno;
     }

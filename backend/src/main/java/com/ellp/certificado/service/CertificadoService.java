@@ -2,16 +2,35 @@ package com.ellp.certificado.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.ellp.certificado.model.Aluno;
 import com.ellp.certificado.model.Certificado;
 import com.ellp.certificado.model.CertificadoId;
+import com.ellp.certificado.model.Workshop;
 import com.ellp.certificado.repository.AlunoRepository;
 import com.ellp.certificado.repository.CertificadoRepository;
 import com.ellp.certificado.repository.WorkshopRepository;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
+import jakarta.mail.internet.MimeMessage;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class CertificadoService {
@@ -25,12 +44,20 @@ public class CertificadoService {
     @Autowired
     private WorkshopRepository workshopRepository;
 
+    @Autowired
+    private JavaMailSender emailSender;
+
     public ResponseEntity<?> getAllCertificado() {
         List<Certificado> certificados = certificadoRepository.findAll();
         if (certificados.isEmpty()) {
             return ResponseEntity.badRequest().body("Nenhum certificado encontrado.");
         }
         return ResponseEntity.ok(certificados);
+    }
+
+    public Certificado getCertificado(String idAluno, int idWorkshop) {
+        Optional<Certificado> certificado = certificadoRepository.findByAlunoIdAlunoAndWorkshopIdWorkshop(idAluno, idWorkshop);
+        return certificado.orElseThrow(() -> new RuntimeException("Certificado não encontrado"));
     }
 
     public ResponseEntity<?> getByAluno(String idAluno) {
@@ -91,4 +118,118 @@ public class CertificadoService {
         return ResponseEntity.ok("Certificado excluído com sucesso!");
     }
 
+    public ResponseEntity<?> generateCertificatePdf(String idAluno, int idWorkshop) {
+        Optional<Certificado> certificadoOptional = certificadoRepository.findByAlunoIdAlunoAndWorkshopIdWorkshop(idAluno, idWorkshop);
+
+        if (certificadoOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Certificado não encontrado para o aluno e workshop fornecidos.");
+        }
+
+        Certificado certificado = certificadoOptional.get();
+        Aluno aluno = certificado.getAluno();
+        Workshop workshop = certificado.getWorkshop();
+
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD);
+            Font subtitleFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
+            Font nameFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD);
+            Font smallFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+
+            Paragraph universityName = new Paragraph("Universidade Tecnológica Federal do Paraná", smallFont);
+            universityName.setAlignment(Element.ALIGN_CENTER);
+            universityName.setSpacingAfter(5);
+            document.add(universityName);
+
+            Paragraph campusName = new Paragraph("Câmpus de Cornélio Procópio", smallFont);
+            campusName.setAlignment(Element.ALIGN_CENTER);
+            campusName.setSpacingAfter(20);
+            document.add(campusName);
+
+            Paragraph title = new Paragraph("DECLARAÇÃO DE PARTICIPAÇÃO", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20);
+            document.add(title);
+
+            Paragraph subtitle = new Paragraph(
+                "O Projeto de Extensão ELLP (Ensino Lúdico de Lógica e Programação) declara que",
+                subtitleFont);
+            subtitle.setAlignment(Element.ALIGN_CENTER);
+            subtitle.setSpacingAfter(30);
+            document.add(subtitle);
+
+            Paragraph participantName = new Paragraph(aluno.getNome().toUpperCase(), nameFont);
+            participantName.setAlignment(Element.ALIGN_CENTER);
+            participantName.setSpacingAfter(30);
+            document.add(participantName);
+
+            Paragraph details = new Paragraph(
+                String.format("participou do workshop %s, realizado em %s, com duração de %d horas.",
+                    workshop.getNome(),
+                    workshop.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    workshop.getDuracao()
+                ),
+                subtitleFont
+            );
+            details.setAlignment(Element.ALIGN_CENTER);
+            details.setSpacingAfter(50);
+            document.add(details);
+
+            Paragraph footer = new Paragraph(
+                String.format("Cornélio Procópio, %s\n\nContato: grupoellp@gmail.com\nProjeto de Extensão Ensino Lúdico de Lógica e Programação",
+                    LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))),
+                smallFont
+            );
+            footer.setAlignment(Element.ALIGN_CENTER);
+            document.add(footer);
+
+            document.close();
+
+            String rootPath = System.getProperty("user.dir");
+            String assetsDirectory = rootPath + File.separator + "assets/certificados";
+            new File(assetsDirectory).mkdirs();
+            String filePath = assetsDirectory + File.separator + "certificado_" + idAluno + "_" + idWorkshop + ".pdf";
+
+            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                fos.write(outputStream.toByteArray());
+            }
+
+            sendCertificateEmail(aluno.getEmail(), "Certificado de Participação - ELLP",
+            "Olá " + aluno.getNome() + ",\n\nSegue em anexo o seu certificado de participação no workshop " +
+                    workshop.getNome() + ".\n\nDescrição do workshop: " + workshop.getDescricao() +  ".\n\n\nAtenciosamente,\nWillker Santana", filePath);
+            
+            return ResponseEntity.ok("Certificado gerado e salvo com sucesso em: " + filePath);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao gerar o certificado: " + e.getMessage());
+        }
+
+        
+    }
+
+    private void sendCertificateEmail(String toEmail, String subject, String text, String filePath) {
+        try {
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(text);
+
+            File file = new File(filePath);
+            if (file.exists()) {
+                helper.addAttachment(file.getName(), file);
+            } else {
+                throw new RuntimeException("Arquivo não encontrado: " + filePath);
+            }
+
+            emailSender.send(mimeMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao enviar o e-mail: " + e.getMessage());
+        }
+    }
 }

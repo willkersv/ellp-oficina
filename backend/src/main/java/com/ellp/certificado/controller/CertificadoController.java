@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import com.ellp.certificado.model.Certificado;
 import com.ellp.certificado.service.CertificadoService;
 
@@ -37,5 +38,12 @@ public class CertificadoController {
     @DeleteMapping("/{idWorkshop}/{idAluno}")
     public ResponseEntity<?> deleteCertificado(@PathVariable Integer idWorkshop, @PathVariable String idAluno) {
         return certificadoService.deleteCertificado(idWorkshop, idAluno);
+    }
+
+    @GetMapping("/gerar-pdf")
+    public ResponseEntity<?> generateCertificatePdf(
+            @RequestParam String idAluno,
+            @RequestParam int idWorkshop) {
+        return certificadoService.generateCertificatePdf(idAluno, idWorkshop);
     }
 }

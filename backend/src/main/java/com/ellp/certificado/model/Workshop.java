@@ -29,9 +29,19 @@ public class Workshop {
     @Column(nullable = false)
     private String descricao;
 
-    public Workshop() {}
+    public Workshop(){
 
+    }
+    
     public Workshop(String nome, Integer duracao, LocalDate data, String descricao) {
+        this.nome = nome;
+        this.duracao = duracao;
+        this.data = data;
+        this.descricao = descricao;
+    }
+
+    public Workshop(Integer idWorkshop,String nome, Integer duracao, LocalDate data, String descricao) {
+        this.idWorkshop = idWorkshop;
         this.nome = nome;
         this.duracao = duracao;
         this.data = data;

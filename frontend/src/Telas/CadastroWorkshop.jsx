@@ -33,7 +33,7 @@ const CadastroWorkshop = () => {
         }
 
         try {
-            const response = await api.post('http://localhost:8080/workshops', {
+            const response = await api.post('http://localhost:8080/api/workshops', {
                 nome: title,
                 descricao: description,
                 data: date,
