@@ -167,7 +167,7 @@ public class CertificadoService {
             document.add(participantName);
 
             Paragraph details = new Paragraph(
-                String.format("participou do workshop %s, realizado em %s, com duração de %d horas.",
+                String.format("participou do workshop %s, realizado em %s, com duração de %d hora(s).",
                     workshop.getNome(),
                     workshop.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     workshop.getDuracao()
