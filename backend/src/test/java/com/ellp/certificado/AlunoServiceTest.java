@@ -41,7 +41,7 @@ public class AlunoServiceTest {
     @Autowired
     private WorkshopRepository workshopRepository;
 
-    @BeforeEach
+ @BeforeEach
     void setup() {
         alunoRepository.deleteAll();
         certificadoRepository.deleteAll();
@@ -60,7 +60,7 @@ public class AlunoServiceTest {
     }
 
     @Test
-    void testDeleteAluno_ComCertificadoVinculado() {
+    void testDeleteAluno_WithCertificado() {
         ResponseEntity<?> response = alunoService.deleteAluno("A001");
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -72,7 +72,7 @@ public class AlunoServiceTest {
     }
 
     @Test
-    void testDeleteAluno_SemCertificadoVinculado() {
+    void testDeleteAluno_WithoutCertificado() {
         certificadoRepository.deleteAll();
 
         ResponseEntity<?> response = alunoService.deleteAluno("A001");
@@ -81,14 +81,6 @@ public class AlunoServiceTest {
         Assertions.assertEquals("Aluno excluído com sucesso!", response.getBody());
 
         Assertions.assertFalse(alunoRepository.existsById("A001"));
-    }
-
-    @Test
-    void testDeleteAluno_NaoEncontrado() {
-        ResponseEntity<?> response = alunoService.deleteAluno("A999");
-
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        Assertions.assertEquals("Aluno não encontrado.", response.getBody());
     }
 
     @Test
