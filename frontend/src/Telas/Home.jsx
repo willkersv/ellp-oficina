@@ -17,14 +17,21 @@ const Home = () => {
     const [search, setSearch] = useState('');
     const [isStudentListVisible, setIsStudentListVisible] = useState(false);
     const [studentListPosition, setStudentListPosition] = useState({ top: 0, left: 0 });
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchWorkshops = async () => {
             try {
-                const response = await api.get('http://localhost:8080/api/workshops');
+                const response = await api.get('/api/workshops');
+                if (response.data.length === 0) {
+                    setErrorMessage('Nenhum workshop encontrado.');
+                } else {
+                    setErrorMessage('');
+                }
                 setWorkshops(response.data);
             } catch (error) {
+                setErrorMessage('Erro ao buscar workshops. Tente novamente mais tarde.');
                 console.error('Erro ao buscar workshops:', error);
             }
         };
@@ -91,22 +98,22 @@ const Home = () => {
                 </div>
                 <ul className="workshop-list">
                     {workshops.map((workshop) => (
-                        <li key={workshop.id} className="workshop-item">
-                            <span className="workshop-title">{workshop.title}</span>
-                            <span>{workshop.date}</span>
-                            <span>{workshop.duration}</span>
+                        <li key={workshop.idWorkshop} className="workshop-item">
+                            <span className="workshop-title">{workshop.nome}</span>
+                            <span>{workshop.data}</span>
+                            <span>{workshop.duracao}</span>
                             <span className="workshop-actions">
                                 <img
                                     src={certificado_icon}
                                     alt="Gerar Certificado"
                                     className="action-icon"
-                                    onClick={() => handleGenerateCertificate(workshop.id)}
+                                    onClick={() => handleGenerateCertificate(workshop.idWorkshop)}
                                 />
                                 <img
                                     src={adicionar_usuario}
                                     alt="Cadastrar Alunos"
                                     className="action-icon"
-                                    onClick={(e) => handleAddStudents(workshop.id, e)}
+                                    onClick={(e) => handleAddStudents(workshop.idWorkshop, e)}
                                 />
                             </span>
                         </li>
