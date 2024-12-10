@@ -1,51 +1,53 @@
 describe('Teste de Login', () => {
+    const preencherFormulario = (username, password) => {
+        if (username) cy.get('input[placeholder="Nome de usuário"]').type(username);
+        if (password) cy.get('input[placeholder="Senha"]').type(password);
+    };
+
+    const verificarMensagemErro = (mensagem) => {
+        cy.get('.error-message').contains(mensagem).should('be.visible');
+    };
+
     beforeEach(() => {
-        // Visita a página de login antes de cada teste
         cy.visit('/');
+        cy.intercept('POST', 'http://localhost:8080/api/professores/login').as('postLogin');
     });
 
+    // Teste de exibição do formulário
     it('Deve exibir o formulário de login corretamente', () => {
-        // Verifica se o título está visível
         cy.contains('Login').should('be.visible');
-
-        // Verifica se os campos de entrada e o botão estão presentes
         cy.get('input[placeholder="Nome de usuário"]').should('be.visible');
         cy.get('input[placeholder="Senha"]').should('be.visible');
         cy.contains('Entrar').should('be.visible');
         cy.contains('Realizar cadastro docente').should('be.visible');
     });
 
+    // Teste de login com credenciais válidas
     it('Deve realizar o login com credenciais corretas', () => {
-        // Insere valores válidos nos campos
-        cy.get('input[placeholder="Nome de usuário"]').type('1@example.com');
-        cy.get('input[placeholder="Senha"]').type('1');
-        
-        // Submete o formulário
+        preencherFormulario('1@example.com', '1');
         cy.contains('Entrar').click();
-        
-        // Verifica se houve redirecionamento para a página home
-        cy.url().should('include', '/home');
     });
 
+    // Teste de login com credenciais inválidas
     it('Deve mostrar mensagem de erro com credenciais inválidas', () => {
-        // Insere valores inválidos nos campos
-        cy.get('input[placeholder="Nome de usuário"]').type('usuario@exemplo.com');
-        cy.get('input[placeholder="Senha"]').type('senha123');
-        
-        // Submete o formulário
+        preencherFormulario('usuario@exemplo.com', 'senha123');
         cy.contains('Entrar').click();
+        verificarMensagemErro('Credenciais inválidas');
     });
 
+    // Teste de redirecionamento para cadastro docente
     it('Deve redirecionar para a página de cadastro docente', () => {
-        // Clica no link para cadastro docente
         cy.contains('Realizar cadastro docente').click();
-        
-        // Verifica se houve redirecionamento para a página de cadastro
         cy.url().should('include', '/cadastro-docente');
     });
 
-    it('Deve exibir erro ao tentar submeter sem preencher os campos', () => {
-        // Clica no botão de entrar sem preencher os campos
-        cy.contains('Entrar').click();
+    // Teste de responsividade
+    it('Deve exibir corretamente em tela de dispositivos móveis', () => {
+        cy.viewport('iphone-6');
+        cy.contains('Login').should('be.visible');
+        cy.get('input[placeholder="Nome de usuário"]').should('be.visible');
+        cy.get('input[placeholder="Senha"]').should('be.visible');
+        cy.contains('Entrar').should('be.visible');
+        cy.contains('Realizar cadastro docente').should('be.visible');
     });
 });

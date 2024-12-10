@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/global.css';
 
+// Importação de componentes personalizados
 import InputField from '../Components/InputField';
 import Button from '../Components/Button';
 import Header from '../Components/Header';
 
+// Importação de ícones utilizados no formulário
 import email_icon from '../Assets/e-mail.png';
 import password_icon from '../Assets/cadeado.png';
 
+// Importação da configuração de API para chamadas ao backend
 import api from '../api/axios';
 
 const Login = () => {
@@ -17,19 +20,26 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    // Função para tratar o envio do formulário de login
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const response = await api.post('http://localhost:8080/api/professores/login', null, {
                 params: { email: username, senha: password },
             });
+
+            // Salva o token no localStorage
+            localStorage.setItem('authToken', response.data.token);
+
+            // Redireciona para a página inicial
             setErrorMessage('');
-            navigate('/home');  // Navegação para a página Home após o login
+            navigate('/home');
         } catch (error) {
             setErrorMessage('Credenciais inválidas');
         }
     };
 
+    // Função para redirecionar o usuário para a página de cadastro de docente
     const goToCadastroDocente = () => {
         navigate('/cadastro-docente');
     };
