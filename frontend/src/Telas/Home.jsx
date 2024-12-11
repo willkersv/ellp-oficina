@@ -20,7 +20,16 @@ const Home = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    // Verifica a autenticação ao carregar o componente
     useEffect(() => {
+
+        const token = localStorage.getItem('authToken'); // Recupera o token do localStorage
+        if (!token) {
+            navigate('/'); // Redireciona para o login se o token não estiver presente
+        } else {
+            fetchWorkshops(); // Busca os workshops apenas se estiver autenticado
+        }
+
         const fetchWorkshops = async () => {
             try {
                 const response = await api.get('/api/workshops');
@@ -36,7 +45,17 @@ const Home = () => {
             }
         };
         fetchWorkshops();
+
     }, []);
+
+    const fetchWorkshops = async () => {
+        try {
+            const response = await api.get('http://localhost:8080/api/workshops');
+            setWorkshops(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar workshops:', error);
+        }
+    };
 
     const fetchStudentsForWorkshop = (id) => {
         const mockStudents = [
@@ -48,7 +67,8 @@ const Home = () => {
     };
 
     const handleLogout = () => {
-        navigate('/');
+        localStorage.removeItem('authToken'); // Remove o token ao sair
+        navigate('/'); // Redireciona para o login
     };
 
     const handleSearch = (event) => {
