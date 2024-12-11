@@ -1,6 +1,7 @@
 package com.ellp.certificado.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,4 +24,6 @@ public interface CertificadoRepository extends JpaRepository<Certificado, Certif
     List<Certificado> findByWorkshopId(@Param("idWorkshop") int idWorkshop);
 
     void deleteByAlunoIdAluno(String idAluno);
+
+    Optional<Certificado> findByAlunoIdAlunoAndWorkshopIdWorkshop(String idAluno, int idWorkshop);
 }

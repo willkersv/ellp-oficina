@@ -24,3 +24,6 @@ yarn-error.log*
 
 /backend/target/
 /.vscode/
+
+/certificados
+
