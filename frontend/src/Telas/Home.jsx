@@ -20,42 +20,31 @@ const Home = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    // Função para buscar workshops
+    const fetchWorkshops = async () => {
+        try {
+            const response = await api.get('http://localhost:8080/api/workshops');
+            if (response.data.length === 0) {
+                setErrorMessage('Nenhum workshop encontrado.');
+            } else {
+                setErrorMessage('');
+            }
+            setWorkshops(response.data);
+        } catch (error) {
+            setErrorMessage('Erro ao buscar workshops. Tente novamente mais tarde.');
+            console.error('Erro ao buscar workshops:', error);
+        }
+    };
+
     // Verifica a autenticação ao carregar o componente
     useEffect(() => {
-
         const token = localStorage.getItem('authToken'); // Recupera o token do localStorage
         if (!token) {
             navigate('/'); // Redireciona para o login se o token não estiver presente
         } else {
-            fetchWorkshops(); // Busca os workshops apenas se estiver autenticado
+            fetchWorkshops(); // Usa a função já definida fora do useEffect
         }
-
-        const fetchWorkshops = async () => {
-            try {
-                const response = await api.get('/api/workshops');
-                if (response.data.length === 0) {
-                    setErrorMessage('Nenhum workshop encontrado.');
-                } else {
-                    setErrorMessage('');
-                }
-                setWorkshops(response.data);
-            } catch (error) {
-                setErrorMessage('Erro ao buscar workshops. Tente novamente mais tarde.');
-                console.error('Erro ao buscar workshops:', error);
-            }
-        };
-        fetchWorkshops();
-
     }, []);
-
-    const fetchWorkshops = async () => {
-        try {
-            const response = await api.get('http://localhost:8080/api/workshops');
-            setWorkshops(response.data);
-        } catch (error) {
-            console.error('Erro ao buscar workshops:', error);
-        }
-    };
 
     const fetchStudentsForWorkshop = (id) => {
         const mockStudents = [
@@ -121,7 +110,7 @@ const Home = () => {
                         <li key={workshop.idWorkshop} className="workshop-item">
                             <span className="workshop-title">{workshop.nome}</span>
                             <span>{workshop.data}</span>
-                            <span>{workshop.duracao}</span>
+                            <span>{workshop.duracao} Horas</span>
                             <span className="workshop-actions">
                                 <img
                                     src={certificado_icon}
