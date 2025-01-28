@@ -36,8 +36,8 @@ const CadastroDocente = () => {
             setErrorMessage('Nome completo é obrigatório');
             return;
         }
-
-        // Validação do email 
+    
+        // Validação do email
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!emailRegex.test(email)) {
             setErrorMessage('Email inválido');
@@ -58,14 +58,21 @@ const CadastroDocente = () => {
                 email: email, 
                 senha: password,
             });
+            
+            // Mensagem de sucesso
             setSuccessMessage('Cadastro realizado com sucesso');
-
+    
             // Limpa os campos após o cadastro ser concluído com sucesso
             setName('');
             setRa('');
             setEmail('');
             setPassword('');
             setErrorMessage('');
+    
+            // Aguarda 3 segundos para redirecionar
+            setTimeout(() => {
+                navigate('/'); // Redireciona para a tela de login
+            }, 2000); // 3000ms = 3 segundos
         } catch (error) {
             setErrorMessage('Erro ao cadastrar professor.');
         }
