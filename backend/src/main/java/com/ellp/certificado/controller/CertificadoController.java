@@ -51,4 +51,9 @@ public class CertificadoController {
             @RequestParam int idWorkshop) {
         return certificadoService.generateCertificatePdf(idAluno, idWorkshop);
     }
+
+    @PostMapping("/gerar-pdf-todos")
+    public ResponseEntity<?> generateAndSendCertificatesForWorkshop(@RequestParam String nomeWorkshop) {
+        return certificadoService.generateAndSendCertificatesForWorkshop(nomeWorkshop);
+    }
 }

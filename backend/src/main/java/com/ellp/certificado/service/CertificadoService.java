@@ -3,6 +3,7 @@ package com.ellp.certificado.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -141,6 +142,40 @@ public class CertificadoService {
         return ResponseEntity.ok("Certificado excluído com sucesso!");
     }
 
+    public ResponseEntity<?> generateAndSendCertificatesForWorkshop(String nomeWorkshop) {
+        // Busca o workshop pelo nome
+        Optional<Workshop> workshopOptional = workshopRepository.findByNome(nomeWorkshop);
+
+        if (workshopOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Workshop não encontrado.");
+        }
+
+        Workshop workshop = workshopOptional.get();
+
+        // Busca todos os alunos vinculados ao workshop
+        List<Certificado> certificados = certificadoRepository.findByWorkshopIdWorkshop(workshop.getIdWorkshop());
+
+        if (certificados.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum aluno encontrado para este workshop.");
+        }
+
+        // Loop para gerar e enviar certificados para cada aluno
+        int certificadosEnviados = 0;
+
+        for (Certificado certificado : certificados) {
+            Aluno aluno = certificado.getAluno();
+
+            // Gera o certificado e envia por e-mail
+            ResponseEntity<?> sucesso = generateCertificatePdf(aluno.getIdAluno(), workshop.getIdWorkshop());
+
+            if (sucesso.getStatusCode() == HttpStatus.OK) {
+                certificadosEnviados++;
+            }
+        }
+
+        return ResponseEntity.ok(certificadosEnviados + " certificados gerados e enviados com sucesso!");
+    }
+
     public ResponseEntity<?> generateCertificatePdf(String idAluno, int idWorkshop) {
         Optional<Certificado> certificadoOptional = certificadoRepository.findByAlunoIdAlunoAndWorkshopIdWorkshop(idAluno, idWorkshop);
 
@@ -167,7 +202,7 @@ public class CertificadoService {
             universityName.setSpacingAfter(5);
             document.add(universityName);
 
-            Paragraph campusName = new Paragraph("Câmpus de Cornélio Procópio", smallFont);
+            Paragraph campusName = new Paragraph("Campus de Cornélio Procópio", smallFont);
             campusName.setAlignment(Element.ALIGN_CENTER);
             campusName.setSpacingAfter(20);
             document.add(campusName);
@@ -222,7 +257,7 @@ public class CertificadoService {
 
             sendCertificateEmail(aluno.getEmail(), "Certificado de Participação - ELLP",
             "Olá " + aluno.getNome() + ",\n\nSegue em anexo o seu certificado de participação no workshop " +
-                    workshop.getNome() + ".\n\nDescrição do workshop: " + workshop.getDescricao() +  ".\n\n\nAtenciosamente,\nWillker Santana", filePath);
+                    workshop.getNome() + ".\n\nDescrição do workshop: " + workshop.getDescricao() +  ".\n\n\nAtenciosamente,\nEquipe ELLP", filePath);
             
             return ResponseEntity.ok("Certificado gerado e salvo com sucesso em: " + filePath);
 
