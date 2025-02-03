@@ -26,4 +26,6 @@ public interface CertificadoRepository extends JpaRepository<Certificado, Certif
     void deleteByAlunoIdAluno(String idAluno);
 
     Optional<Certificado> findByAlunoIdAlunoAndWorkshopIdWorkshop(String idAluno, int idWorkshop);
+
+    List<Certificado> findByWorkshopIdWorkshop(int idWorkshop);
 }
