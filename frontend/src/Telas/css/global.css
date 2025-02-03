@@ -2,8 +2,8 @@
    1. Configurações gerais e variáveis
 --------------------------------------*/
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #66bb6a;
+    --primary-color: #057fcf; /* Cor principal */
+    --secondary-color: #F79335; /* Cor secundária */
     --background-color: #f9f9f9;
     --text-color: #333;
     --error-color: #f44336;
@@ -61,7 +61,7 @@ body {
 
 .link-text {
     font-size: 14px;
-    color: #007bff;
+    color: #057fcf; /* Cor principal */
     cursor: pointer;
     text-decoration: underline;
     margin-top: -10px;
@@ -94,8 +94,8 @@ body {
 }
 
 .input-group:focus-within {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+    border-color: var(--primary-color); /* Cor principal */
+    box-shadow: 0 0 8px rgba(5, 127, 207, 0.3); /* Cor principal */
 }
 
 .input {
@@ -128,14 +128,13 @@ body {
     resize: none;
 }
 
-
 /* -----------------------------------
    5. Botões
 --------------------------------------*/
 .button {
     width: 100%;
     padding: var(--input-padding);
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--primary-color), #0093e5); /* Cor principal e tom */
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -146,7 +145,7 @@ body {
 }
 
 .button:hover {
-    background: linear-gradient(135deg, #45a049, #57a657);
+    background: linear-gradient(135deg, #045c99, #057fcf); /* Azul escuro */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
 }
@@ -160,7 +159,7 @@ body {
 .cadastro-button {
     width: 100%;
     padding: var(--input-padding);
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* Cor principal */
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
@@ -168,7 +167,7 @@ body {
 }
 
 .cadastro-button:hover {
-    background-color: #45a049;
+    background-color: #045c99; /* Tom mais escuro */
 }
 
 .button-icon {

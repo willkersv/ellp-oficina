@@ -74,7 +74,6 @@ const CadastroWorkshop = () => {
             <div className="back-arrow" onClick={goToWorkshops} role="button" aria-label="Voltar para a página anterior">
                 <img src={back_arrow_icon} alt="Voltar" />
             </div>
-            
             <Header title="Criar Workshop" />
             <form className="workshop-form" onSubmit={handleSubmit}>
                 
