@@ -3,7 +3,6 @@ package com.ellp.certificado.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -97,6 +96,31 @@ public class CertificadoService {
         return ResponseEntity.ok(certificados);
     }
 
+    public ResponseEntity<?> deleteAlunoFromWorkshop(String idAluno, String nomeWorkshop) {
+        // Verifica se o aluno existe
+        if (!alunoRepository.existsById(idAluno)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Aluno não encontrado.");
+        }
+
+        // Busca o workshop pelo nome
+        Optional<Workshop> workshopOptional = workshopRepository.findByNome(nomeWorkshop);
+        if (workshopOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Workshop não encontrado.");
+        }
+
+        Workshop workshop = workshopOptional.get();
+
+        // Verifica se o aluno está cadastrado nesse workshop
+        CertificadoId certificadoId = new CertificadoId(idAluno, workshop.getIdWorkshop());
+        if (!certificadoRepository.existsById(certificadoId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O aluno não está cadastrado neste workshop.");
+        }
+
+        // Remove o certificado (vínculo entre aluno e workshop)
+        certificadoRepository.deleteById(certificadoId);
+
+        return ResponseEntity.ok("Aluno removido do workshop com sucesso!");
+    }
     public ResponseEntity<?> getByWorkshop(Integer idWorkshop) {
         if (!workshopRepository.existsById(idWorkshop)) {
             return ResponseEntity.badRequest().body("Workshop não encontrado.");
@@ -130,16 +154,6 @@ public class CertificadoService {
 
         certificadoRepository.save(certificado);
         return ResponseEntity.ok("Certificado adicionado com sucesso!");
-    }
-
-    public ResponseEntity<?> deleteCertificado(Integer idWorkshop, String idAluno) {
-        CertificadoId certificadoId = new CertificadoId(idAluno, idWorkshop);
-        if (!certificadoRepository.existsById(certificadoId)) {
-            return ResponseEntity.badRequest().body("Certificado não encontrado.");
-        }
-
-        certificadoRepository.deleteById(certificadoId);
-        return ResponseEntity.ok("Certificado excluído com sucesso!");
     }
 
     public ResponseEntity<?> generateAndSendCertificatesForWorkshop(String nomeWorkshop) {
