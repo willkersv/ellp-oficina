@@ -41,7 +41,8 @@ const CadastroAluno = () => {
         }
 
         try {
-            const response = await api.post('http://localhost:8080/api/alunos/cadastro', {
+            const response = await api.post('http://localhost:8080/api/alunos', {
+                //colocar id aqui
                 nome: name,
                 email: email,
                 curso: curso,

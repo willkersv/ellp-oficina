@@ -40,9 +40,11 @@ public class CertificadoController {
         return certificadoService.getByWorkshop(idWorkshop);
     }
 
-    @DeleteMapping("/{idWorkshop}/{idAluno}")
-    public ResponseEntity<?> deleteCertificado(@PathVariable Integer idWorkshop, @PathVariable String idAluno) {
-        return certificadoService.deleteCertificado(idWorkshop, idAluno);
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> removeAlunoDoWorkshop(
+            @RequestParam String idAluno,
+            @RequestParam String nomeWorkshop) {
+        return certificadoService.deleteAlunoFromWorkshop(idAluno, nomeWorkshop);
     }
 
     @GetMapping("/gerar-pdf")
@@ -50,5 +52,10 @@ public class CertificadoController {
             @RequestParam String idAluno,
             @RequestParam int idWorkshop) {
         return certificadoService.generateCertificatePdf(idAluno, idWorkshop);
+    }
+
+    @PostMapping("/gerar-pdf-todos")
+    public ResponseEntity<?> generateAndSendCertificatesForWorkshop(@RequestParam String nomeWorkshop) {
+        return certificadoService.generateAndSendCertificatesForWorkshop(nomeWorkshop);
     }
 }
