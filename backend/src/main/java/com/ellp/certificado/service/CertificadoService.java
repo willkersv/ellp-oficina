@@ -60,6 +60,29 @@ public class CertificadoService {
         return certificado.orElseThrow(() -> new RuntimeException("Certificado não encontrado"));
     }
 
+    public ResponseEntity<?> getAlunosByWorkshopNome(String nomeWorkshop) {
+
+        Optional<Workshop> workshopOptional = workshopRepository.findByNome(nomeWorkshop);
+
+        if (workshopOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Workshop não encontrado.");
+        }
+
+        Workshop workshop = workshopOptional.get();
+
+        List<Certificado> certificados = certificadoRepository.findByWorkshopIdWorkshop(workshop.getIdWorkshop());
+
+        if (certificados.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum aluno encontrado para este workshop.");
+        }
+
+        List<Aluno> alunos = certificados.stream()
+                                         .map(Certificado::getAluno)
+                                         .toList();
+
+        return ResponseEntity.ok(alunos);
+    }
+
     public ResponseEntity<?> getByAluno(String idAluno) {
         if (!alunoRepository.existsById(idAluno)) {
             return ResponseEntity.badRequest().body("Aluno não encontrado.");

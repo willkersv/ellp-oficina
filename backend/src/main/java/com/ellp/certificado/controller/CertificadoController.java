@@ -25,6 +25,11 @@ public class CertificadoController {
         return certificadoService.getAllCertificado();
     }
 
+    @GetMapping("/alunosByworkshop")
+    public ResponseEntity<?> getAlunosByWorkshopNome(@RequestParam String nomeWorkshop) {
+        return certificadoService.getAlunosByWorkshopNome(nomeWorkshop);
+    }
+
     @GetMapping("/aluno/{idAluno}")
     public ResponseEntity<?> getByAluno(@PathVariable String idAluno) {
         return certificadoService.getByAluno(idAluno);
