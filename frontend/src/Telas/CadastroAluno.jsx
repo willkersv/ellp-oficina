@@ -12,6 +12,7 @@ import user_icon from '../Assets/user.png';
 import email_icon from '../Assets/e-mail.png';
 import curso_icon from '../Assets/curso.png';
 import back_arrow_icon from '../Assets/seta-esquerda.png';
+import ra_icon from '../Assets/registrado.png';
 
 // Importação da configuração de API para chamadas ao backend
 import api from '../api/axios';
@@ -85,6 +86,13 @@ const CadastroAluno = () => {
                     placeholder="Email institucional"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                />
+                <InputField
+                    icon={ra_icon}
+                    type="text"
+                    placeholder="RA (Registro Acadêmico)"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
                 <InputField
                     icon={curso_icon}

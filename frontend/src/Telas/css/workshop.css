@@ -162,6 +162,15 @@
     width: 24px;
     height: 24px;
     cursor: pointer;
+    margin-top: 6px;
+    margin-left: 10px;
+}
+
+/* Ícone de  lixeira */
+.lixeira-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
     margin-left: 10px;
 }
 
