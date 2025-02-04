@@ -9,6 +9,8 @@ import Button from "../Components/Button"; // Importando o componente de botão
 import back_arrow_icon from '../Assets/seta-esquerda.png';
 import LupaIcon from "../Assets/lupa.png"; // Ícone da lupa
 import CertificadoIcon from "../Assets/certificado.png"; // Ícone do certificado
+import lixeira from '../Assets/lixeira.png'; // Ícone da lixeira
+
 
 const Workshop = () => {
   const { id } = useParams();
@@ -80,6 +82,16 @@ const Workshop = () => {
     } catch (error) {
       setErrorMessage("Erro ao gerar certificado para o aluno.");
       console.error("Erro ao gerar certificado:", error);
+    }
+  };
+
+  const handleDeleteStudant = async (studentId) => {
+    try {
+      await api.post(`http://localhost:8080/api/workshops/${id}/students/`);
+      alert(`aluno ID: ${studentId}! removido`);
+    } catch (error) {
+      setErrorMessage("Erro ao excluir aluno.");
+      console.error("Erro ao excluir aluno.", error);
     }
   };
 
@@ -163,6 +175,12 @@ const Workshop = () => {
                       <strong>Curso:</strong> {student.curso}
                     </p>
                   </div>
+                  <img
+                    src={lixeira}
+                    alt="Remover Aluno"
+                    className="lixeira-icon"
+                    onClick={() => handleDeleteStudant(student.id)}
+                  />
                   <img
                     src={CertificadoIcon}
                     alt="Certificado"
