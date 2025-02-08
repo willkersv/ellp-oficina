@@ -17,20 +17,11 @@ const Workshop = () => {
   const navigate = useNavigate();
 
   const [workshop, setWorkshop] = useState(null);
-  const [registeredStudents, setRegisteredStudents] = useState([
-    { id: 1, nome: "João Silva", email: "joao.silva@email.com", curso: "Engenharia de Software" },
-    { id: 2, nome: "Maria Oliveira", email: "maria.oliveira@email.com", curso: "Ciência da Computação" },
-    { id: 3, nome: "Pedro Santos", email: "pedro.santos@email.com", curso: "Análise e Desenvolvimento de Sistemas" },
-  ]);
+  const [registeredStudents, setRegisteredStudents] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const allStudents = [
-    { id: 4, nome: "Ana Paula", email: "ana.paula@email.com", curso: "Sistemas de Informação" },
-    { id: 5, nome: "Carlos Lima", email: "carlos.lima@email.com", curso: "Engenharia de Computação" },
-    { id: 6, nome: "Fernanda Costa", email: "fernanda.costa@email.com", curso: "Tecnologia da Informação" },
-  ];
+  const [allStudents, setAllStudents] = useState([]);
 
   const fetchWorkshop = async () => {
     try {
@@ -39,6 +30,16 @@ const Workshop = () => {
     } catch (error) {
       setErrorMessage("Erro ao carregar informações do workshop.");
       console.error("Erro ao buscar workshop:", error);
+    }
+  };
+
+  const fetchAllStudents = async () => {
+    try {
+      const alunosResponse = await api.get('http://localhost:8080/api/alunos');
+      setAllStudents(alunosResponse.data); // Define todos os alunos no estado
+    } catch (error) {
+      setErrorMessage("Erro ao carregar lista de alunos.");
+      console.error("Erro ao buscar alunos:", error);
     }
   };
 
@@ -55,19 +56,36 @@ const Workshop = () => {
     }
   };
 
-  const handleAddStudent = (studentId) => {
-    const student = allStudents.find((s) => s.id === studentId);
-
-    if (student && !registeredStudents.some((s) => s.id === studentId)) {
-      setRegisteredStudents([...registeredStudents, student]);
+  const handleAddStudent = async (studentId) => {
+    console.log(id);
+    console.log(studentId);
+    try {
+      await api.post(`http://localhost:8080/api/certificados`, {
+        workshop:{idWorkshop: id},
+        aluno:{idAluno: studentId}
+      });
+    } catch (error) {
+      setErrorMessage("Erro ao adicionar aluno ao workshop.");
+      console.error("Erro ao adicionar aluno:", error);
     }
     setSearch("");
     setSearchResults([]);
   };
 
+  const fetchRegisteredStudents = async () => {
+    try {
+      const registrosResponse = await api.get(`/api/certificados/alunosByworkshop?nomeWorkshop=${workshop.nome}`);
+      setRegisteredStudents(registrosResponse.data);
+    } catch (error) {
+      setErrorMessage("Erro ao carregar alunos cadastrados.");
+      console.error("Erro ao buscar alunos cadastrados:", error);
+    }
+  };
+
+
   const handleGenerateCertificates = async () => {
     try {
-      await api.post(`http://localhost:8080/api/workshops/${id}/generate-certificates`);
+      await api.post(`/api/certificados/gerar-pdf-todos?nomeWorkshop=${workshop.nome}`);
       alert("Certificados gerados para todos os alunos!");
     } catch (error) {
       setErrorMessage("Erro ao gerar certificados.");
@@ -77,7 +95,7 @@ const Workshop = () => {
 
   const handleGenerateCertificateForStudent = async (studentId) => {
     try {
-      await api.post(`http://localhost:8080/api/workshops/${id}/students/${studentId}/generate-certificate`);
+      await api.get(`/api/certificados/gerar-pdf?idAluno=${studentId}&idWorkshop=${id}`);
       alert(`Certificado gerado para o aluno ID: ${studentId}!`);
     } catch (error) {
       setErrorMessage("Erro ao gerar certificado para o aluno.");
@@ -87,8 +105,9 @@ const Workshop = () => {
 
   const handleDeleteStudant = async (studentId) => {
     try {
-      await api.post(`http://localhost:8080/api/workshops/${id}/students/`);
-      alert(`aluno ID: ${studentId}! removido`);
+      await api.delete(`/api/certificados/delete?idAluno=${studentId}&nomeWorkshop=${workshop.nome}`);
+      alert(`Aluno ID: ${studentId} removido do workshop!`);
+      setRegisteredStudents(registeredStudents.filter(student => student.id !== studentId)); // Atualiza a lista de alunos registrados
     } catch (error) {
       setErrorMessage("Erro ao excluir aluno.");
       console.error("Erro ao excluir aluno.", error);
@@ -97,7 +116,14 @@ const Workshop = () => {
 
   useEffect(() => {
     fetchWorkshop();
+    fetchAllStudents();
   }, []);
+  
+  useEffect(() => {
+    if (workshop) {
+      fetchRegisteredStudents();
+    }
+  }, [workshop]);
 
   const goToWorkshops = () => {
     navigate('/home');
@@ -148,7 +174,10 @@ const Workshop = () => {
 
                       <button
                         className="add-student-button"
-                        onClick={() => handleAddStudent(student.id)}
+                        onClick={() => { {
+                          handleAddStudent(student.idAluno); // Corrigido para idAluno
+                        }
+                        }}
                       >
                         Adicionar
                       </button>
@@ -179,13 +208,13 @@ const Workshop = () => {
                     src={lixeira}
                     alt="Remover Aluno"
                     className="lixeira-icon"
-                    onClick={() => handleDeleteStudant(student.id)}
+                    onClick={() => handleDeleteStudant(student.idAluno)}
                   />
                   <img
                     src={CertificadoIcon}
                     alt="Certificado"
                     className="certificate-icon"
-                    onClick={() => handleGenerateCertificateForStudent(student.id)}
+                    onClick={() => handleGenerateCertificateForStudent(student.idAluno)}
                   />
                 </div>
               ))}

@@ -21,6 +21,7 @@ const CadastroAluno = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [curso, setCurso] = useState('');
+    const [ra, setRa] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -44,6 +45,7 @@ const CadastroAluno = () => {
         try {
             const response = await api.post('http://localhost:8080/api/alunos', {
                 //colocar id aqui
+                idAluno: ra,
                 nome: name,
                 email: email,
                 curso: curso,
@@ -55,6 +57,7 @@ const CadastroAluno = () => {
             setName('');
             setEmail('');
             setCurso('');
+            setRa('');
             setErrorMessage('');
         } catch (error) {
             setErrorMessage(`Erro ao cadastrar aluno: ${error.response?.data?.message || 'Tente novamente mais tarde.'}`);
@@ -91,8 +94,8 @@ const CadastroAluno = () => {
                     icon={ra_icon}
                     type="text"
                     placeholder="RA (Registro Acadêmico)"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={ra}
+                    onChange={(e) => setRa(e.target.value)}
                 />
                 <InputField
                     icon={curso_icon}
