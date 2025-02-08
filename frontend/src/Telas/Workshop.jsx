@@ -3,13 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./css/workshop.css";
 
 import api from "../api/axios";
-import Button from "../Components/Button"; // Importando o componente de botão
+import Button from "../Components/Button"; 
 
 // Importando os ícones como imagens
 import back_arrow_icon from '../Assets/seta-esquerda.png';
-import LupaIcon from "../Assets/lupa.png"; // Ícone da lupa
-import CertificadoIcon from "../Assets/certificado.png"; // Ícone do certificado
-import lixeira from '../Assets/lixeira.png'; // Ícone da lixeira
+import LupaIcon from "../Assets/lupa.png"; 
+import CertificadoIcon from "../Assets/certificado.png"; 
+import lixeira from '../Assets/lixeira.png'; 
 
 
 const Workshop = () => {

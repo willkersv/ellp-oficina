@@ -72,7 +72,7 @@ const CadastroDocente = () => {
             // Aguarda 3 segundos para redirecionar
             setTimeout(() => {
                 navigate('/'); // Redireciona para a tela de login
-            }, 2000); // 3000ms = 3 segundos
+            }, 2000);
         } catch (error) {
             setErrorMessage('Erro ao cadastrar professor.');
         }
