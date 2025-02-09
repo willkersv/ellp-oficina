@@ -15,16 +15,9 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                {/* Rota pública para login */}
+                {/* Rota pública para login e cadastro do docente */}
                 <Route path="/" element={<Login />} />
-
-                {/* Rotas públicas para cadastro */}
                 <Route path="/cadastro-docente" element={<CadastroDocente />} />
-                <Route path="/cadastro-aluno" element={<CadastroAluno />} />
-                <Route path="/cadastro-workshop" element={<CadastroWorkshop />} />
-
-                {/* Rota para a tela de Workshop */}
-                <Route path="/workshop/:id" element={<Workshop />} />
 
                 {/* Rotas privadas */}
                 <Route
@@ -35,7 +28,28 @@ function App() {
                         </PrivateRoute>
                     }
                 />
-
+                <Route 
+                    path="/cadastro-aluno" 
+                    element={
+                        <PrivateRoute>
+                            <CadastroAluno />
+                        </PrivateRoute>} 
+                />
+                <Route 
+                    path="/cadastro-workshop" 
+                    element={
+                        <PrivateRoute>
+                            <CadastroWorkshop />
+                        </PrivateRoute>}
+                />
+                <Route 
+                    path="/workshop/:id" 
+                    element={
+                        <PrivateRoute>
+                            <Workshop />
+                        </PrivateRoute>} 
+                />
+                
                 {/* Rota para URLs inexistentes */}
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

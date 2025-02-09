@@ -109,7 +109,7 @@
 
 /* Estilo do botão Adicionar no dropdown */
 .add-student-button {
-    background-color: #4caf50;
+    background-color: #F79335;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -118,7 +118,7 @@
 }
 
 .add-student-button:hover {
-    background-color: #45a049;
+    background-color: #fe810b;
 }
 
 /* Lista de alunos cadastrados */

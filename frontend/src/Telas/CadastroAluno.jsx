@@ -29,18 +29,7 @@ const CadastroAluno = () => {
 
     // Função para tratar o envio do formulário de cadastro
     const handleCadastro = async (e) => {
-        e.preventDefault();
-
-        if (!name || !email || !curso) {
-            setErrorMessage('Todos os campos são obrigatórios.');
-            return;
-        }
-
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (!emailRegex.test(email)) {
-            setErrorMessage('Email inválido.');
-            return;
-        }
+        e.preventDefault(); 
 
         try {
             const response = await api.post('http://localhost:8080/api/alunos', {
@@ -64,7 +53,7 @@ const CadastroAluno = () => {
             setTimeout(() => setErrorMessage(''), 5000);
         }
     };
-
+    // Função para navegar para a página inicial
     const goToHome = () => {
         navigate('/home');
     };
