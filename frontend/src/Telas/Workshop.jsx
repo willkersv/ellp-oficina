@@ -121,7 +121,7 @@ const Workshop = () => {
       alert(`Aluno ID: ${studentId} removido do workshop!`);
       window.location.reload();
     } catch (error) {
-      setErrorMessage("Erro ao excluir aluno.");
+      setErrorMessage("Erro ao deletar aluno.");
       console.error("Erro ao excluir aluno.", error);
     }
   };
