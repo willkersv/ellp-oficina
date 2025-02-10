@@ -1,286 +1,141 @@
-/* Estilo principal */
+/* Contêiner principal */
+
+/* Adicionando a imagem de fundo no body */
+body {
+    background-image: url('ellpinho_v2.png'); /* Substitua pelo caminho da sua imagem */
+    background-position: left; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Impede que a imagem se repita */
+    background-size: cover; /* Faz a imagem cobrir toda a área */
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Faz a altura ocupar toda a tela */
+    
+}
+
 .home-container {
     padding: 20px;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.home-title {
-    font-size: 26px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-/* Botão para adicionar workshop */
-.button-add-workshop {
-    width: 100%;
-    display: block;
-    margin: 0 auto 20px auto;
-    padding: 12px 24px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.button-add-workshop:hover {
-    background-color: #45a049;
-    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px);
-}
-
-/* Tabela de Workshops */
-.workshop-table {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 20px;
-}
-
-.workshop-header,
-.workshop-item {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    padding: 12px;
-    align-items: center;
-    font-size: 16px;
-    border-bottom: 1px solid #ddd;
-}
-
-.workshop-header {
-    background-color: #f1f1f1;
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: bold;
-    color: #555;
-}
-
-.workshop-item {
-    background-color: #ffffff;
-    transition: background-color 0.2s ease;
-    font-size: 14px;
-}
-
-.workshop-item:hover {
     background-color: #f9f9f9;
-    transform: scale(1.01);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.workshop-title {
-    font-weight: bold;
-    color: #333;
-}
-
-/* Ações dentro da tabela */
-.workshop-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.action-icon {
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
-    transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.action-icon:hover {
-    transform: scale(1.15);
-    filter: brightness(1.3);
-}
-
-/* Lista de alunos */
-.student-list-container {
-    position: absolute; /* Ou fixed se preferir */
-    background-color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    width: 300px;
-    z-index: 1000;
-    padding: 15px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.student-search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.search-input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.add-student-icon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.add-student-icon:hover {
-    transform: scale(1.1);
-}
-
-.student-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.student-item {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-
-.close-button {
-    margin-top: 10px;
-    padding: 6px 12px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.close-button:hover {
-    background-color: #d32f2f;
-}
-
-.student-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.student-item:hover {
-    background-color: #f9f9f9;
-}
-
-.student-item .action-icon {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.student-item .action-icon:hover {
-    transform: scale(1.1);
-    filter: brightness(1.2);
-}
-
-
-/* Efeitos de transição */
-.workshop-item:hover,
-.student-item:hover,
-.button-add-workshop:hover {
-    transition: all 0.2s ease-in-out;
-}
-
-/* Espaçamento entre colunas */
-.workshop-header,
-.workshop-item {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 2fr;
-    column-gap: 20px;
-    padding: 12px;
-    align-items: center;
-    font-size: 16px;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Estilo do botão de logoff */
-.button-logout {
-    background-color: #d9534f;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.button-logout:hover {
-    background-color: #c9302c;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-/* Contêiner do cabeçalho */
+/* Cabeçalho */
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.home-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #057fcf; /* Cor principal */
 }
 
 .logout-icon {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     cursor: pointer;
-    transition: transform 0.2s ease, filter 0.2s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .logout-icon:hover {
-    transform: scale(1.1);
-    filter: brightness(1.2);
+    transform: scale(1.15);
+    opacity: 0.8;
 }
 
-/* Estilo responsivo */
-@media (max-width: 768px) {
-    .home-container {
-        padding: 10px;
-        max-width: 100%;
-    }
-
-    .workshop-header,
-    .workshop-item {
-        grid-template-columns: 1fr;
-        text-align: center;
-        font-size: 14px;
-    }
-
-    .workshop-actions {
-        flex-direction: column;
-        gap: 5px;
-    }
+/* Ações */
+.actions-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 40px;
 }
 
-@media (max-width: 480px) {
-    .button-add-workshop {
-        font-size: 14px;
-        padding: 10px 16px;
-    }
+.button-add-workshop,
+.button-add-students {
+    padding: 12px 30px;
+    background: linear-gradient(45deg, #057fcf, #0093e5); /* Tom de azul */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
 
-    .search-input {
-        font-size: 12px;
-    }
+.button-add-workshop:hover,
+.button-add-students:hover {
+    background: linear-gradient(45deg, #0083cc, #057fcf); /* Azul escuro */
+    transform: scale(1.05);
+}
+
+/* Cards dos workshops */
+.workshop-cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas fixas */
+    gap: 25px;
+    justify-items: center;
+}
+
+.workshop-card {
+    display: flex;
+    flex-direction: column; /* Coloca os itens em coluna */
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-align: center; /* Alinha os textos no centro */
+}
+
+.workshop-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.workshop-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #34495e; /* Cor neutra */
+}
+
+.workshop-card p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #7f8c8d;
+}
+
+.generate-certificate-btn {
+    margin-top: 15px; /* Adiciona espaço entre o botão e o texto */
+    padding: 10px 25px;
+    background: linear-gradient(45deg, #F79335, #ff9f45); /* Cor secundária */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.generate-certificate-btn:hover {
+    background: linear-gradient(45deg, #e6792b, #F79335); /* Tom mais intenso */
+    transform: scale(1.05);
+}
+
+/* Mensagem de erro */
+.error-message {
+    color: #e74c3c;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 30px;
 }

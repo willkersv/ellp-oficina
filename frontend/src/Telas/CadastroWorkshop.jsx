@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/global.css';
 
@@ -23,7 +23,7 @@ const CadastroWorkshop = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
 
         // Validação simples
@@ -32,13 +32,25 @@ const CadastroWorkshop = () => {
             return;
         }
 
+        if (isNaN(duration) || duration <= 0) {
+            setErrorMessage('A duração deve ser um número válido maior que zero.');
+            return;
+        }
+
+        const workshopDate = new Date(date);
+        if (workshopDate < new Date()) {
+            setErrorMessage('A data do workshop não pode ser no passado.');
+            return;
+        }
+
         try {
             const response = await api.post('http://localhost:8080/api/workshops', {
                 nome: title,
                 descricao: description,
                 data: date,
-                duracao: parseInt(duration),  // Certifique-se de que a duração é um número
+                duracao: parseInt(duration),
             });
+
             setSuccessMessage('Workshop criado com sucesso!');
             setTitle('');
             setDescription('');
@@ -48,9 +60,10 @@ const CadastroWorkshop = () => {
                 navigate('/home');
             }, 1000);
         } catch (error) {
+            console.error(error);
             setErrorMessage('Erro ao criar o workshop. Tente novamente.');
         }
-    };
+    }, [title, description, date, duration, navigate]);
 
     const goToWorkshops = () => {
         navigate('/home');
@@ -58,10 +71,9 @@ const CadastroWorkshop = () => {
 
     return (
         <div className="container">
-            <div className="back-arrow" onClick={goToWorkshops}>
+            <div className="back-arrow" onClick={goToWorkshops} role="button" aria-label="Voltar para a página anterior">
                 <img src={back_arrow_icon} alt="Voltar" />
             </div>
-            
             <Header title="Criar Workshop" />
             <form className="workshop-form" onSubmit={handleSubmit}>
                 
@@ -71,11 +83,13 @@ const CadastroWorkshop = () => {
                     placeholder="Título do Workshop"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    aria-label="Título do workshop"
                 />
                 <TextArea
                     placeholder="Descrição"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    aria-label="Descrição do workshop"
                 />
                 <InputField
                     icon={calendario}
@@ -83,16 +97,18 @@ const CadastroWorkshop = () => {
                     placeholder="Data do Workshop"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
+                    aria-label="Data do workshop"
                 />
                 <InputField
-                    icon={relogio}S
+                    icon={relogio}
                     type="text"
                     placeholder="Duração (em horas)"
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
+                    aria-label="Duração do workshop"
                 />
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-                {successMessage && <p className="success-message">{successMessage}</p>}
+                {errorMessage && <p className="error-message" aria-live="assertive">{errorMessage}</p>}
+                {successMessage && <p className="success-message" aria-live="polite">{successMessage}</p>}
                 <Button type="submit" className="workshop-button">
                     Criar Workshop
                 </Button>

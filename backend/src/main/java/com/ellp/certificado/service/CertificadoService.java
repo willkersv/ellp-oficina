@@ -60,6 +60,29 @@ public class CertificadoService {
         return certificado.orElseThrow(() -> new RuntimeException("Certificado não encontrado"));
     }
 
+    public ResponseEntity<?> getAlunosByWorkshopNome(String nomeWorkshop) {
+
+        Optional<Workshop> workshopOptional = workshopRepository.findByNome(nomeWorkshop);
+
+        if (workshopOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Workshop não encontrado.");
+        }
+
+        Workshop workshop = workshopOptional.get();
+
+        List<Certificado> certificados = certificadoRepository.findByWorkshopIdWorkshop(workshop.getIdWorkshop());
+
+        if (certificados.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum aluno encontrado para este workshop.");
+        }
+
+        List<Aluno> alunos = certificados.stream()
+                                         .map(Certificado::getAluno)
+                                         .toList();
+
+        return ResponseEntity.ok(alunos);
+    }
+
     public ResponseEntity<?> getByAluno(String idAluno) {
         if (!alunoRepository.existsById(idAluno)) {
             return ResponseEntity.badRequest().body("Aluno não encontrado.");
@@ -73,6 +96,31 @@ public class CertificadoService {
         return ResponseEntity.ok(certificados);
     }
 
+    public ResponseEntity<?> deleteAlunoFromWorkshop(String idAluno, String nomeWorkshop) {
+        // Verifica se o aluno existe
+        if (!alunoRepository.existsById(idAluno)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Aluno não encontrado.");
+        }
+
+        // Busca o workshop pelo nome
+        Optional<Workshop> workshopOptional = workshopRepository.findByNome(nomeWorkshop);
+        if (workshopOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Workshop não encontrado.");
+        }
+
+        Workshop workshop = workshopOptional.get();
+
+        // Verifica se o aluno está cadastrado nesse workshop
+        CertificadoId certificadoId = new CertificadoId(idAluno, workshop.getIdWorkshop());
+        if (!certificadoRepository.existsById(certificadoId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O aluno não está cadastrado neste workshop.");
+        }
+
+        // Remove o certificado (vínculo entre aluno e workshop)
+        certificadoRepository.deleteById(certificadoId);
+
+        return ResponseEntity.ok("Aluno removido do workshop com sucesso!");
+    }
     public ResponseEntity<?> getByWorkshop(Integer idWorkshop) {
         if (!workshopRepository.existsById(idWorkshop)) {
             return ResponseEntity.badRequest().body("Workshop não encontrado.");
@@ -108,14 +156,38 @@ public class CertificadoService {
         return ResponseEntity.ok("Certificado adicionado com sucesso!");
     }
 
-    public ResponseEntity<?> deleteCertificado(Integer idWorkshop, String idAluno) {
-        CertificadoId certificadoId = new CertificadoId(idAluno, idWorkshop);
-        if (!certificadoRepository.existsById(certificadoId)) {
-            return ResponseEntity.badRequest().body("Certificado não encontrado.");
+    public ResponseEntity<?> generateAndSendCertificatesForWorkshop(String nomeWorkshop) {
+        // Busca o workshop pelo nome
+        Optional<Workshop> workshopOptional = workshopRepository.findByNome(nomeWorkshop);
+
+        if (workshopOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Workshop não encontrado.");
         }
 
-        certificadoRepository.deleteById(certificadoId);
-        return ResponseEntity.ok("Certificado excluído com sucesso!");
+        Workshop workshop = workshopOptional.get();
+
+        // Busca todos os alunos vinculados ao workshop
+        List<Certificado> certificados = certificadoRepository.findByWorkshopIdWorkshop(workshop.getIdWorkshop());
+
+        if (certificados.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum aluno encontrado para este workshop.");
+        }
+
+        // Loop para gerar e enviar certificados para cada aluno
+        int certificadosEnviados = 0;
+
+        for (Certificado certificado : certificados) {
+            Aluno aluno = certificado.getAluno();
+
+            // Gera o certificado e envia por e-mail
+            ResponseEntity<?> sucesso = generateCertificatePdf(aluno.getIdAluno(), workshop.getIdWorkshop());
+
+            if (sucesso.getStatusCode() == HttpStatus.OK) {
+                certificadosEnviados++;
+            }
+        }
+
+        return ResponseEntity.ok(certificadosEnviados + " certificados gerados e enviados com sucesso!");
     }
 
     public ResponseEntity<?> generateCertificatePdf(String idAluno, int idWorkshop) {
@@ -144,7 +216,7 @@ public class CertificadoService {
             universityName.setSpacingAfter(5);
             document.add(universityName);
 
-            Paragraph campusName = new Paragraph("Câmpus de Cornélio Procópio", smallFont);
+            Paragraph campusName = new Paragraph("Campus de Cornélio Procópio", smallFont);
             campusName.setAlignment(Element.ALIGN_CENTER);
             campusName.setSpacingAfter(20);
             document.add(campusName);
@@ -167,7 +239,7 @@ public class CertificadoService {
             document.add(participantName);
 
             Paragraph details = new Paragraph(
-                String.format("participou do workshop %s, realizado em %s, com duração de %d horas.",
+                String.format("participou do workshop %s, realizado em %s, com duração de %d hora(s).",
                     workshop.getNome(),
                     workshop.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     workshop.getDuracao()
@@ -199,7 +271,7 @@ public class CertificadoService {
 
             sendCertificateEmail(aluno.getEmail(), "Certificado de Participação - ELLP",
             "Olá " + aluno.getNome() + ",\n\nSegue em anexo o seu certificado de participação no workshop " +
-                    workshop.getNome() + ".\n\nDescrição do workshop: " + workshop.getDescricao() +  ".\n\n\nAtenciosamente,\nWillker Santana", filePath);
+                    workshop.getNome() + ".\n\nDescrição do workshop: " + workshop.getDescricao() +  ".\n\n\nAtenciosamente,\nEquipe ELLP", filePath);
             
             return ResponseEntity.ok("Certificado gerado e salvo com sucesso em: " + filePath);
 
