@@ -23,6 +23,17 @@ const Workshop = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [allStudents, setAllStudents] = useState([]);
 
+  useEffect(() => {
+    fetchWorkshop();
+    fetchAllStudents();
+  }, []);
+  
+  useEffect(() => {
+    if (workshop) {
+      fetchRegisteredStudents();
+    }
+  }, [workshop]);
+
   const fetchWorkshop = async () => {
     try {
       const response = await api.get(`http://localhost:8080/api/workshops/${id}`);
@@ -64,6 +75,7 @@ const Workshop = () => {
         workshop:{idWorkshop: id},
         aluno:{idAluno: studentId}
       });
+      window.location.reload();
     } catch (error) {
       setErrorMessage("Erro ao adicionar aluno ao workshop.");
       console.error("Erro ao adicionar aluno:", error);
@@ -77,7 +89,7 @@ const Workshop = () => {
       const registrosResponse = await api.get(`/api/certificados/alunosByworkshop?nomeWorkshop=${workshop.nome}`);
       setRegisteredStudents(registrosResponse.data);
     } catch (error) {
-      setErrorMessage("Erro ao carregar alunos cadastrados.");
+      setErrorMessage("Nenhum aluno cadastrado");
       console.error("Erro ao buscar alunos cadastrados:", error);
     }
   };
@@ -107,23 +119,14 @@ const Workshop = () => {
     try {
       await api.delete(`/api/certificados/delete?idAluno=${studentId}&nomeWorkshop=${workshop.nome}`);
       alert(`Aluno ID: ${studentId} removido do workshop!`);
-      setRegisteredStudents(registeredStudents.filter(student => student.id !== studentId)); // Atualiza a lista de alunos registrados
+      window.location.reload();
     } catch (error) {
       setErrorMessage("Erro ao excluir aluno.");
       console.error("Erro ao excluir aluno.", error);
     }
   };
 
-  useEffect(() => {
-    fetchWorkshop();
-    fetchAllStudents();
-  }, []);
-  
-  useEffect(() => {
-    if (workshop) {
-      fetchRegisteredStudents();
-    }
-  }, [workshop]);
+
 
   const goToWorkshops = () => {
     navigate('/home');

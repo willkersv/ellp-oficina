@@ -48,6 +48,8 @@ const CadastroAluno = () => {
             setCurso('');
             setRa('');
             setErrorMessage('');
+
+            setTimeout(() => navigate('/home'), 2000);
         } catch (error) {
             setErrorMessage(`Erro ao cadastrar aluno: ${error.response?.data?.message || 'Tente novamente mais tarde.'}`);
             setTimeout(() => setErrorMessage(''), 5000);
