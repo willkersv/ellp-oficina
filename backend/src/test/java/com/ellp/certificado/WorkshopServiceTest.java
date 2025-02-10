@@ -139,6 +139,7 @@ class WorkshopServiceTest {
         assertEquals("Workshop não encontrado.", response.getBody());
     }
 
+    @SuppressWarnings("null")
     @Test
     void testGetWorkshopByNome_Success() {
         ResponseEntity<?> response = workshopService.getWorkshopByNome("Workshop 1");
