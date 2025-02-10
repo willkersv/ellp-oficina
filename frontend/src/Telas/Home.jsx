@@ -94,7 +94,7 @@ const Home = () => {
                             className="generate-certificate-btn"
                             onClick={() => handleGenerateCertificate(workshop.idWorkshop)}
                         >
-                            Gerar Certificado
+                            Detalhar workshop
                         </Button>
                     </div>
                 ))}

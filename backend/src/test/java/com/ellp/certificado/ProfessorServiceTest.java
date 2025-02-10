@@ -42,6 +42,7 @@ class ProfessorServiceTest {
         professorRepository.save(professor);
     }
 
+    @SuppressWarnings("null")
     @Test
     void testLogin_Success() {
         ResponseEntity<Boolean> response = professorService.login("carlos@gmail.com", "senha123");
@@ -50,6 +51,7 @@ class ProfessorServiceTest {
         assertTrue(response.getBody());
     }
 
+    @SuppressWarnings("null")
     @Test
     void testLogin_InvalidPassword() {
         ResponseEntity<Boolean> response = professorService.login("carlos@gmail.com", "senhaErrada");

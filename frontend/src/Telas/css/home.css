@@ -2,13 +2,13 @@
 
 /* Adicionando a imagem de fundo no body */
 body {
-    background-image: url('ellpinho_v2.png'); /* Substitua pelo caminho da sua imagem */
-    background-position: left; /* Centraliza a imagem */
-    background-repeat: no-repeat; /* Impede que a imagem se repita */
-    background-size: cover; /* Faz a imagem cobrir toda a área */
+    background-image: url('ellpinho_v2.png');
+    background-position: left;
+    background-repeat: no-repeat; 
+    background-size: cover; 
     margin: 0;
     padding: 0;
-    height: 100vh; /* Faz a altura ocupar toda a tela */
+    height: 90vh;
     
 }
 

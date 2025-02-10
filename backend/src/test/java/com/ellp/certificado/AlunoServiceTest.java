@@ -88,6 +88,7 @@ public class AlunoServiceTest {
         Assertions.assertFalse(alunoService.findAll().isEmpty());
     }
 
+    @SuppressWarnings("null")
     @Test
     void testGetAlunoById_Success() {
         ResponseEntity<?> response = alunoService.getAlunoById("A001");
@@ -103,6 +104,7 @@ public class AlunoServiceTest {
         assertEquals("Aluno não encontrado.", response.getBody());
     }
 
+    @SuppressWarnings("null")
     @Test
     void testGetAlunoByNome_Success() {
         ResponseEntity<?> response = alunoService.getAlunoByNome("João");
